@@ -6,7 +6,6 @@ Endpoints:
   POST /api/chat      → Stub (returns 501 until Phase 3)
 """
 
-import os
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import JSONResponse
 
@@ -16,6 +15,7 @@ from api.schemas import (
     ChatResponse,
     ErrorResponse,
 )
+from core.config import settings
 
 router = APIRouter(prefix="/api")
 
@@ -36,8 +36,6 @@ XRAY_MIMES = {
     "image/webp",
 }
 
-MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
-
 
 # ─── GET /api/health ─────────────────────────────────────────
 
@@ -48,8 +46,8 @@ async def health_check():
         status="ok",
         version="1.0.0",
         models={
-            "gemini": bool(os.getenv("GEMINI_API_KEY")),
-            "groq": bool(os.getenv("GROQ_API_KEY")),
+            "gemini": bool(settings.GEMINI_API_KEY),
+            "groq": bool(settings.GROQ_API_KEY),
         },
     )
 
@@ -93,17 +91,17 @@ async def analyze_report(
 
     # Validate file size
     file_bytes = await file.read()
-    if len(file_bytes) > MAX_FILE_SIZE:
+    if len(file_bytes) > settings.MAX_FILE_SIZE:
         return JSONResponse(
             status_code=422,
             content=ErrorResponse(
                 error="file_too_large",
                 message="That file is a bit large for us (max 10MB). Could you try a smaller one?",
-                detail=f"Received: {len(file_bytes)} bytes. Max: {MAX_FILE_SIZE} bytes",
+                detail=f"Received: {len(file_bytes)} bytes. Max: {settings.MAX_FILE_SIZE} bytes",
             ).model_dump(),
         )
 
-    # ── Stub response (replaced in Phase 4) ──
+    # ── Stub response (replaced in Phase 3) ──
     return JSONResponse(
         status_code=501,
         content=ErrorResponse(

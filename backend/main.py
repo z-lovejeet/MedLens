@@ -1,12 +1,12 @@
 """MedLens FastAPI application entry point."""
 
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 load_dotenv()
 
+from core.config import settings
 from api.routes import router
 
 app = FastAPI(
@@ -16,10 +16,9 @@ app = FastAPI(
 )
 
 # CORS
-origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,7 +30,7 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
         "main:app",
-        host=os.getenv("HOST", "0.0.0.0"),
-        port=int(os.getenv("PORT", "8000")),
+        host=settings.HOST,
+        port=settings.PORT,
         reload=True,
     )
