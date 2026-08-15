@@ -4,7 +4,7 @@ import base64
 import json
 
 from graph.state import MedLensState
-from core.models import model_router
+from core.models import model_router, parse_json_from_llm
 from core.prompts import OCR_PROMPT
 
 
@@ -24,18 +24,18 @@ async def ocr_agent(state: MedLensState) -> dict:
         )
 
         # OCR prompt asks Gemini to return {"extracted_text": "..."}
-        # Parse the JSON wrapper and extract the text field
+        # Parse the JSON wrapper cleanly stripping any markdown fences
         try:
-            data = json.loads(response)
-            extracted = data.get("extracted_text", response)
-        except json.JSONDecodeError:
+            data = parse_json_from_llm(response)
+            extracted = data.get("extracted_text", response) if isinstance(data, dict) else response
+        except Exception:
             # If Gemini returned plain text instead of JSON, use it directly
             extracted = response
 
         if not extracted or len(extracted.strip()) < 10:
             return {"error": "We had trouble reading your document. Could you try a clearer image? 📸"}
 
-        return {"extracted_text": extracted}
+        return {"extracted_text": str(extracted)}
 
     except json.JSONDecodeError:
         return {"error": "We had trouble understanding the AI's response. Please try again."}

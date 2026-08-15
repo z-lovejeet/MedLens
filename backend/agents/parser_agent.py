@@ -10,7 +10,7 @@ This is the most complex agent with 4 helper functions for post-LLM processing:
 import json
 
 from graph.state import MedLensState
-from core.models import model_router
+from core.models import model_router, parse_json_from_llm
 from core.prompts import PARSER_PROMPT
 
 
@@ -76,7 +76,7 @@ async def parser_agent(state: MedLensState) -> dict:
         prompt = PARSER_PROMPT.format(extracted_text=state["extracted_text"])
 
         response = await model_router.call_text(prompt)
-        data = json.loads(response)
+        data = parse_json_from_llm(response)
 
         # Build patient with computed initials
         patient_data = data["patient"]
@@ -90,25 +90,37 @@ async def parser_agent(state: MedLensState) -> dict:
         }
 
         # Build metrics with auto-calculated fields
-        raw_metrics = data.get("metrics", [])
+        raw_metrics = data.get("metrics", data.get("tests", data.get("lab_results", [])))
         if not raw_metrics:
             return {"error": "We couldn't find enough medical data in this file. Is this the right report?"}
 
+        import re
         metrics = []
         for m in raw_metrics:
             try:
-                value = float(m["value"])
-                min_ref = float(m["min"])
-                max_ref = float(m["max"])
-            except (ValueError, TypeError, KeyError):
+                name = m.get("name", m.get("test_name", "Unknown Test"))
+                val_str = str(m.get("value", ""))
+                val_match = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", val_str)
+                if not val_match:
+                    continue
+                value = float(val_match[0])
+
+                min_str = str(m.get("min", "0"))
+                min_match = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", min_str)
+                min_ref = float(min_match[0]) if min_match else 0.0
+
+                max_str = str(m.get("max", str(min_ref * 2 or 100)))
+                max_match = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", max_str)
+                max_ref = float(max_match[0]) if max_match else (min_ref + 10.0)
+            except (ValueError, TypeError, IndexError, KeyError):
                 continue  # Skip malformed metrics
 
             scale_min, scale_max = compute_scale(min_ref, max_ref)
             status = classify_status(value, min_ref, max_ref)
 
             metrics.append({
-                "id": make_metric_id(m["name"]),
-                "name": m["name"],
+                "id": make_metric_id(name),
+                "name": name,
                 "value": value,
                 "unit": m.get("unit", ""),
                 "min": min_ref,
