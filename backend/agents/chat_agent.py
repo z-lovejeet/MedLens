@@ -47,12 +47,21 @@ async def chat_agent(
         response = await model_router.call_chat(messages)
         data = parse_json_from_llm(response)
 
+        follow_ups = data.get("suggestedFollowUps", [])
+
+        # Clamp to 2-3 items (ChatResponse schema requires min_length=2, max_length=3)
+        defaults = [
+            "What should I ask my doctor about this?",
+            "Can you explain this in simpler terms?",
+            "Are there any lifestyle changes I should consider?",
+        ]
+        if len(follow_ups) < 2:
+            follow_ups.extend(defaults[len(follow_ups):2])
+        follow_ups = follow_ups[:3]
+
         return {
             "reply": data["reply"],
-            "suggestedFollowUps": data.get("suggestedFollowUps", [
-                "What should I ask my doctor about this?",
-                "Can you explain this in simpler terms?",
-            ]),
+            "suggestedFollowUps": follow_ups,
         }
 
     except json.JSONDecodeError:

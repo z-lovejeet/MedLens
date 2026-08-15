@@ -25,11 +25,22 @@ async def xray_agent(state: MedLensState) -> dict:
     Model:  Gemini Vision (call_vision) — retry once on failure
     """
     try:
-        image_b64 = base64.b64encode(state["file_bytes"]).decode("utf-8")
+        file_bytes = state["file_bytes"]
+
+        # Detect MIME type from file magic bytes
+        if file_bytes[:8] == b'\x89PNG\r\n\x1a\n':
+            mime = "image/png"
+        elif file_bytes[:3] == b'\xff\xd8\xff':
+            mime = "image/jpeg"
+        else:
+            mime = "image/jpeg"  # fallback
+
+        image_b64 = base64.b64encode(file_bytes).decode("utf-8")
 
         response = await model_router.call_vision(
             image_data=image_b64,
             prompt=XRAY_PROMPT,
+            mime_type=mime,
         )
 
         data = parse_json_from_llm(response)
