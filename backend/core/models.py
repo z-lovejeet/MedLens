@@ -199,3 +199,38 @@ class ModelRouter:
 
 # Singleton
 model_router = ModelRouter()
+
+
+def parse_json_from_llm(text: str) -> dict:
+    """Safely extract and parse JSON from LLM output, stripping markdown fences and surrounding commentary."""
+    import json
+    import re
+
+    s = text.strip()
+
+    # 1. Direct parse attempt
+    try:
+        return json.loads(s)
+    except Exception:
+        pass
+
+    # 2. Extract content from ```json ... ``` or ``` ... ``` code blocks
+    fence_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", s)
+    if fence_match:
+        try:
+            return json.loads(fence_match.group(1).strip())
+        except Exception:
+            pass
+
+    # 3. Find outermost '{' to '}'
+    first_brace = s.find("{")
+    last_brace = s.rfind("}")
+    if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+        json_candidate = s[first_brace:last_brace + 1].strip()
+        try:
+            return json.loads(json_candidate)
+        except Exception:
+            pass
+
+    # 4. Final attempt
+    return json.loads(s)
