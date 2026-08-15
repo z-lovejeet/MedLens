@@ -28,7 +28,7 @@ class Settings:
 
     # Limits
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB
-    ANALYSIS_TIMEOUT: int = 30             # seconds
+    ANALYSIS_TIMEOUT: int = 60             # seconds
     CHAT_TIMEOUT: int = 10                 # seconds
     RATE_LIMIT_ANALYZE: int = 10           # per minute per IP
     RATE_LIMIT_CHAT: int = 30              # per minute per IP

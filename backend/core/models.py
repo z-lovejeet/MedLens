@@ -18,7 +18,7 @@ class ModelRouter:
         self.groq = AsyncGroq(api_key=settings.GROQ_API_KEY)
 
     async def call_vision(self, image_data: str, prompt: str) -> str:
-        """Vision tasks → Gemini ONLY.
+        """Vision tasks → Gemini primary with active fallback models.
 
         Args:
             image_data: Base64-encoded image string
@@ -26,18 +26,15 @@ class ModelRouter:
 
         Returns:
             LLM response text
-
-        Raises:
-            Exception: If Gemini fails after retry
         """
         image_part = {
             "mime_type": "image/jpeg",
             "data": image_data,
         }
 
+        # 1. Try primary configured Gemini model
         try:
-            response = await asyncio.to_thread(
-                self.gemini.generate_content,
+            response = await self.gemini.generate_content_async(
                 [prompt, image_part],
                 generation_config=genai.GenerationConfig(
                     response_mime_type="application/json",
@@ -46,10 +43,12 @@ class ModelRouter:
             )
             return response.text
         except Exception:
-            # Retry once after 2 second delay
-            await asyncio.sleep(2)
-            response = await asyncio.to_thread(
-                self.gemini.generate_content,
+            pass
+
+        # 2. Fallback to gemini-3.5-flash
+        try:
+            fallback_35 = genai.GenerativeModel("gemini-3.5-flash")
+            response = await fallback_35.generate_content_async(
                 [prompt, image_part],
                 generation_config=genai.GenerationConfig(
                     response_mime_type="application/json",
@@ -57,20 +56,39 @@ class ModelRouter:
                 ),
             )
             return response.text
+        except Exception:
+            pass
+
+        # 3. Fallback to gemini-3.1-flash-lite
+        try:
+            fallback_31 = genai.GenerativeModel("gemini-3.1-flash-lite")
+            response = await fallback_31.generate_content_async(
+                [prompt, image_part],
+                generation_config=genai.GenerationConfig(
+                    response_mime_type="application/json",
+                    temperature=0.3,
+                ),
+            )
+            return response.text
+        except Exception:
+            pass
+
+        # 4. Fallback to gemini-3-flash-preview
+        fallback_30 = genai.GenerativeModel("gemini-3-flash-preview")
+        response = await fallback_30.generate_content_async(
+            [prompt, image_part],
+            generation_config=genai.GenerationConfig(
+                response_mime_type="application/json",
+                temperature=0.3,
+            ),
+        )
+        return response.text
 
     async def call_text(self, prompt: str) -> str:
-        """Text tasks → Gemini primary, Groq fallback.
-
-        Args:
-            prompt: Text prompt (may include JSON context)
-
-        Returns:
-            LLM response text (should be valid JSON)
-        """
-        # Try Gemini first
+        """Text tasks → Gemini primary, Groq / Gemini 3.5 fallbacks with retry."""
+        # 1. Try primary Gemini model
         try:
-            response = await asyncio.to_thread(
-                self.gemini.generate_content,
+            response = await self.gemini.generate_content_async(
                 prompt,
                 generation_config=genai.GenerationConfig(
                     response_mime_type="application/json",
@@ -81,20 +99,48 @@ class ModelRouter:
         except Exception:
             pass
 
-        # Fallback to Groq
-        response = await self.groq.chat.completions.create(
-            model=settings.GROQ_MODEL,
-            messages=[
-                {"role": "system", "content": "You are a medical analysis AI. Always respond with valid JSON only."},
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.4,
-            response_format={"type": "json_object"},
+        # 2. Fallback to Groq (ultra-fast)
+        try:
+            response = await self.groq.chat.completions.create(
+                model=settings.GROQ_MODEL,
+                messages=[
+                    {"role": "system", "content": "You are a medical analysis AI. Always respond with valid JSON only."},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.4,
+                response_format={"type": "json_object"},
+            )
+            return response.choices[0].message.content
+        except Exception:
+            pass
+
+        # 3. Fallback to gemini-3.5-flash
+        try:
+            fallback_35 = genai.GenerativeModel("gemini-3.5-flash")
+            response = await fallback_35.generate_content_async(
+                prompt,
+                generation_config=genai.GenerationConfig(
+                    response_mime_type="application/json",
+                    temperature=0.4,
+                ),
+            )
+            return response.text
+        except Exception:
+            pass
+
+        # 4. Fallback to gemini-3.1-flash-lite
+        fallback_31 = genai.GenerativeModel("gemini-3.1-flash-lite")
+        response = await fallback_31.generate_content_async(
+            prompt,
+            generation_config=genai.GenerationConfig(
+                response_mime_type="application/json",
+                temperature=0.4,
+            ),
         )
-        return response.choices[0].message.content
+        return response.text
 
     async def call_chat(self, messages: list[dict]) -> str:
-        """Chat tasks → Groq primary (speed), Gemini fallback.
+        """Chat tasks → Groq primary (speed), Gemini fallbacks with retry.
 
         Args:
             messages: Full message array including system, history, and user
@@ -102,7 +148,7 @@ class ModelRouter:
         Returns:
             LLM response text (should be valid JSON with reply + suggestedFollowUps)
         """
-        # Try Groq first (fast)
+        # 1. Try Groq first (fast)
         try:
             response = await self.groq.chat.completions.create(
                 model=settings.GROQ_MODEL,
@@ -115,16 +161,33 @@ class ModelRouter:
         except Exception:
             pass
 
-        # Fallback to Gemini
-        # Convert messages to single prompt for Gemini
+        # 2. Fallback to primary Gemini
+        try:
+            combined = "\n".join(
+                f"{'System' if m['role']=='system' else m['role'].title()}: {m['content']}"
+                for m in messages
+            )
+            combined += "\n\nRespond with JSON: {\"reply\": \"...\", \"suggestedFollowUps\": [\"...\"]}"
+
+            response = await self.gemini.generate_content_async(
+                combined,
+                generation_config=genai.GenerationConfig(
+                    response_mime_type="application/json",
+                    temperature=0.6,
+                ),
+            )
+            return response.text
+        except Exception:
+            pass
+
+        # 3. Fallback to gemini-3.5-flash
         combined = "\n".join(
             f"{'System' if m['role']=='system' else m['role'].title()}: {m['content']}"
             for m in messages
         )
         combined += "\n\nRespond with JSON: {\"reply\": \"...\", \"suggestedFollowUps\": [\"...\"]}"
-
-        response = await asyncio.to_thread(
-            self.gemini.generate_content,
+        fallback_35 = genai.GenerativeModel("gemini-3.5-flash")
+        response = await fallback_35.generate_content_async(
             combined,
             generation_config=genai.GenerationConfig(
                 response_mime_type="application/json",
