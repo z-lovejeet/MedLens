@@ -6,7 +6,7 @@ It's a standalone async function called directly from /api/chat.
 
 import json
 
-from core.models import model_router
+from core.models import model_router, parse_json_from_llm
 from core.prompts import CHAT_SYSTEM_PROMPT
 
 
@@ -45,7 +45,7 @@ async def chat_agent(
 
         # Call Groq (fast) with Gemini fallback
         response = await model_router.call_chat(messages)
-        data = json.loads(response)
+        data = parse_json_from_llm(response)
 
         return {
             "reply": data["reply"],

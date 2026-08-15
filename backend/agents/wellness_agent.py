@@ -3,7 +3,7 @@
 import json
 
 from graph.state import MedLensState
-from core.models import model_router
+from core.models import model_router, parse_json_from_llm
 from core.prompts import WELLNESS_PROMPT
 
 
@@ -27,7 +27,7 @@ async def wellness_agent(state: MedLensState) -> dict:
         prompt = WELLNESS_PROMPT.format(context=context)
 
         response = await model_router.call_text(prompt)
-        data = json.loads(response)
+        data = parse_json_from_llm(response)
 
         return {
             "recommendations": data["recommendations"],
