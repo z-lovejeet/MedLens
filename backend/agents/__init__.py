@@ -1,1 +1,1 @@
-"""MedLens AI agents — OCR, Parser, X-Ray, Explainer, Wellness, Chat."""
+"""MedLens agents — specialized AI agents for the analysis pipeline."""
