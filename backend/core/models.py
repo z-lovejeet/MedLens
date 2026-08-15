@@ -1,5 +1,3 @@
-"""Model router with automatic fallback between Gemini and Groq."""
-
 import asyncio
 import google.generativeai as genai
 from groq import AsyncGroq
@@ -17,145 +15,169 @@ class ModelRouter:
         # Configure Groq
         self.groq = AsyncGroq(api_key=settings.GROQ_API_KEY)
 
-    async def call_vision(self, image_data: str, prompt: str) -> str:
+    async def call_vision(self, image_data: str, prompt: str, mime_type: str = "image/jpeg") -> str:
         """Vision tasks → Gemini primary with active fallback models.
 
         Args:
             image_data: Base64-encoded image string
             prompt: Text prompt to send with the image
+            mime_type: MIME type of the image (detected from file magic bytes)
 
         Returns:
             LLM response text
         """
         image_part = {
-            "mime_type": "image/jpeg",
+            "mime_type": mime_type,
             "data": image_data,
         }
 
-        # 1. Try primary configured Gemini model
+        # 1. Try primary configured Gemini model (15s timeout)
         try:
-            response = await self.gemini.generate_content_async(
-                [prompt, image_part],
-                generation_config=genai.GenerationConfig(
-                    response_mime_type="application/json",
-                    temperature=0.3,
+            response = await asyncio.wait_for(
+                self.gemini.generate_content_async(
+                    [prompt, image_part],
+                    generation_config=genai.GenerationConfig(
+                        response_mime_type="application/json",
+                        temperature=0.3,
+                    ),
                 ),
+                timeout=15.0,
             )
             return response.text
         except Exception:
             pass
 
-        # 2. Fallback to gemini-3.5-flash
+        # 2. Fallback to gemini-3.5-flash-lite (15s timeout)
         try:
-            fallback_35 = genai.GenerativeModel("gemini-3.5-flash")
-            response = await fallback_35.generate_content_async(
-                [prompt, image_part],
-                generation_config=genai.GenerationConfig(
-                    response_mime_type="application/json",
-                    temperature=0.3,
+            fallback_35l = genai.GenerativeModel("gemini-3.5-flash-lite")
+            response = await asyncio.wait_for(
+                fallback_35l.generate_content_async(
+                    [prompt, image_part],
+                    generation_config=genai.GenerationConfig(
+                        response_mime_type="application/json",
+                        temperature=0.3,
+                    ),
                 ),
+                timeout=15.0,
             )
             return response.text
         except Exception:
             pass
 
-        # 3. Fallback to gemini-3.1-flash-lite
+        # 3. Fallback to gemini-3.1-flash-lite (15s timeout)
         try:
-            fallback_31 = genai.GenerativeModel("gemini-3.1-flash-lite")
-            response = await fallback_31.generate_content_async(
-                [prompt, image_part],
-                generation_config=genai.GenerationConfig(
-                    response_mime_type="application/json",
-                    temperature=0.3,
+            fallback_31l = genai.GenerativeModel("gemini-3.1-flash-lite")
+            response = await asyncio.wait_for(
+                fallback_31l.generate_content_async(
+                    [prompt, image_part],
+                    generation_config=genai.GenerationConfig(
+                        response_mime_type="application/json",
+                        temperature=0.3,
+                    ),
                 ),
+                timeout=15.0,
             )
             return response.text
         except Exception:
             pass
 
         # 4. Fallback to gemini-3-flash-preview
-        fallback_30 = genai.GenerativeModel("gemini-3-flash-preview")
-        response = await fallback_30.generate_content_async(
-            [prompt, image_part],
-            generation_config=genai.GenerationConfig(
-                response_mime_type="application/json",
-                temperature=0.3,
-            ),
-        )
-        return response.text
+        try:
+            fallback_30 = genai.GenerativeModel("gemini-3-flash-preview")
+            response = await asyncio.wait_for(
+                fallback_30.generate_content_async(
+                    [prompt, image_part],
+                    generation_config=genai.GenerationConfig(
+                        response_mime_type="application/json",
+                        temperature=0.3,
+                    ),
+                ),
+                timeout=20.0,
+            )
+            return response.text
+        except Exception as e:
+            raise RuntimeError(f"All vision model attempts failed: {str(e)}")
 
     async def call_text(self, prompt: str) -> str:
-        """Text tasks → Gemini primary, Groq / Gemini 3.5 fallbacks with retry."""
-        # 1. Try primary Gemini model
+        """Text tasks → Gemini primary (10s), Groq (fast fallback), Gemini secondary."""
+        # 1. Try primary Gemini model (10s timeout)
         try:
-            response = await self.gemini.generate_content_async(
-                prompt,
-                generation_config=genai.GenerationConfig(
-                    response_mime_type="application/json",
-                    temperature=0.4,
+            response = await asyncio.wait_for(
+                self.gemini.generate_content_async(
+                    prompt,
+                    generation_config=genai.GenerationConfig(
+                        response_mime_type="application/json",
+                        temperature=0.4,
+                    ),
                 ),
+                timeout=10.0,
             )
             return response.text
         except Exception:
             pass
 
-        # 2. Fallback to Groq (ultra-fast)
+        # 2. Fallback to Groq (ultra-fast ~500ms)
         try:
-            response = await self.groq.chat.completions.create(
-                model=settings.GROQ_MODEL,
-                messages=[
-                    {"role": "system", "content": "You are a medical analysis AI. Always respond with valid JSON only."},
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=0.4,
-                response_format={"type": "json_object"},
+            response = await asyncio.wait_for(
+                self.groq.chat.completions.create(
+                    model=settings.GROQ_MODEL,
+                    messages=[
+                        {"role": "system", "content": "You are a medical analysis AI. Always respond with valid JSON only."},
+                        {"role": "user", "content": prompt},
+                    ],
+                    temperature=0.4,
+                    response_format={"type": "json_object"},
+                ),
+                timeout=8.0,
             )
             return response.choices[0].message.content
         except Exception:
             pass
 
-        # 3. Fallback to gemini-3.5-flash
+        # 3. Fallback to gemini-3.5-flash-lite
         try:
-            fallback_35 = genai.GenerativeModel("gemini-3.5-flash")
-            response = await fallback_35.generate_content_async(
-                prompt,
-                generation_config=genai.GenerationConfig(
-                    response_mime_type="application/json",
-                    temperature=0.4,
+            fallback_35l = genai.GenerativeModel("gemini-3.5-flash-lite")
+            response = await asyncio.wait_for(
+                fallback_35l.generate_content_async(
+                    prompt,
+                    generation_config=genai.GenerationConfig(
+                        response_mime_type="application/json",
+                        temperature=0.4,
+                    ),
                 ),
+                timeout=10.0,
             )
             return response.text
         except Exception:
             pass
 
         # 4. Fallback to gemini-3.1-flash-lite
-        fallback_31 = genai.GenerativeModel("gemini-3.1-flash-lite")
-        response = await fallback_31.generate_content_async(
-            prompt,
-            generation_config=genai.GenerationConfig(
-                response_mime_type="application/json",
-                temperature=0.4,
+        fallback_31l = genai.GenerativeModel("gemini-3.1-flash-lite")
+        response = await asyncio.wait_for(
+            fallback_31l.generate_content_async(
+                prompt,
+                generation_config=genai.GenerationConfig(
+                    response_mime_type="application/json",
+                    temperature=0.4,
+                ),
             ),
+            timeout=15.0,
         )
         return response.text
 
     async def call_chat(self, messages: list[dict]) -> str:
-        """Chat tasks → Groq primary (speed), Gemini fallbacks with retry.
-
-        Args:
-            messages: Full message array including system, history, and user
-
-        Returns:
-            LLM response text (should be valid JSON with reply + suggestedFollowUps)
-        """
+        """Chat tasks → Groq primary (speed), Gemini fallbacks with retry."""
         # 1. Try Groq first (fast)
         try:
-            response = await self.groq.chat.completions.create(
-                model=settings.GROQ_MODEL,
-                messages=messages,
-                temperature=0.6,
-                max_tokens=1024,
-                response_format={"type": "json_object"},
+            response = await asyncio.wait_for(
+                self.groq.chat.completions.create(
+                    model=settings.GROQ_MODEL,
+                    messages=messages,
+                    temperature=0.6,
+                    max_tokens=1024,
+                    response_format={"type": "json_object"},
+                ),
+                timeout=8.0,
             )
             return response.choices[0].message.content
         except Exception:
@@ -169,30 +191,36 @@ class ModelRouter:
             )
             combined += "\n\nRespond with JSON: {\"reply\": \"...\", \"suggestedFollowUps\": [\"...\"]}"
 
-            response = await self.gemini.generate_content_async(
-                combined,
-                generation_config=genai.GenerationConfig(
-                    response_mime_type="application/json",
-                    temperature=0.6,
+            response = await asyncio.wait_for(
+                self.gemini.generate_content_async(
+                    combined,
+                    generation_config=genai.GenerationConfig(
+                        response_mime_type="application/json",
+                        temperature=0.6,
+                    ),
                 ),
+                timeout=10.0,
             )
             return response.text
         except Exception:
             pass
 
-        # 3. Fallback to gemini-3.5-flash
+        # 3. Fallback to gemini-3.5-flash-lite
         combined = "\n".join(
             f"{'System' if m['role']=='system' else m['role'].title()}: {m['content']}"
             for m in messages
         )
         combined += "\n\nRespond with JSON: {\"reply\": \"...\", \"suggestedFollowUps\": [\"...\"]}"
-        fallback_35 = genai.GenerativeModel("gemini-3.5-flash")
-        response = await fallback_35.generate_content_async(
-            combined,
-            generation_config=genai.GenerationConfig(
-                response_mime_type="application/json",
-                temperature=0.6,
+        fallback_35l = genai.GenerativeModel("gemini-3.5-flash-lite")
+        response = await asyncio.wait_for(
+            fallback_35l.generate_content_async(
+                combined,
+                generation_config=genai.GenerationConfig(
+                    response_mime_type="application/json",
+                    temperature=0.6,
+                ),
             ),
+            timeout=10.0,
         )
         return response.text
 
