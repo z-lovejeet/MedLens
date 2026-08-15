@@ -4,7 +4,7 @@ import base64
 import json
 
 from graph.state import MedLensState
-from core.models import model_router
+from core.models import model_router, parse_json_from_llm
 from core.prompts import XRAY_PROMPT
 
 
@@ -32,7 +32,7 @@ async def xray_agent(state: MedLensState) -> dict:
             prompt=XRAY_PROMPT,
         )
 
-        data = json.loads(response)
+        data = parse_json_from_llm(response)
 
         # Build patient from X-ray metadata
         name = data.get("patient_name", "Patient")
