@@ -7,6 +7,7 @@ Endpoints:
 """
 
 import asyncio
+from typing import Union
 
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import JSONResponse
@@ -58,7 +59,15 @@ async def health_check():
 
 # ─── POST /api/analyze ──────────────────────────────────────
 
-@router.post("/analyze")
+@router.post(
+    "/analyze",
+    response_model=Union[BloodAnalysisResponse, XRayAnalysisResponse],
+    responses={
+        422: {"model": ErrorResponse, "description": "Validation error"},
+        504: {"model": ErrorResponse, "description": "Analysis timeout"},
+        500: {"model": ErrorResponse, "description": "Pipeline error"},
+    },
+)
 async def analyze_report(
     file: UploadFile = File(...),
     kind: str = Form(...),
@@ -195,7 +204,14 @@ async def analyze_report(
 
 # ─── POST /api/chat ──────────────────────────────────────────
 
-@router.post("/chat")
+@router.post(
+    "/chat",
+    response_model=ChatResponse,
+    responses={
+        504: {"model": ErrorResponse, "description": "Chat timeout"},
+        500: {"model": ErrorResponse, "description": "Chat error"},
+    },
+)
 async def chat_with_results(request: ChatRequest):
     """Chat about analysis results.
 
