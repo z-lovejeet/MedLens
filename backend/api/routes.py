@@ -2,15 +2,19 @@
 
 Endpoints:
   GET  /api/health   → Live health check
-  POST /api/analyze   → Stub (returns 501 until Phase 3)
-  POST /api/chat      → Stub (returns 501 until Phase 3)
+  POST /api/analyze   → Full LangGraph pipeline (blood + xray)
+  POST /api/chat      → Chat agent for follow-up questions
 """
+
+import asyncio
 
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import JSONResponse
 
 from api.schemas import (
     HealthResponse,
+    BloodAnalysisResponse,
+    XRayAnalysisResponse,
     ChatRequest,
     ChatResponse,
     ErrorResponse,
@@ -61,8 +65,9 @@ async def analyze_report(
 ):
     """Upload a medical report or X-ray for AI analysis.
 
-    Currently returns 501 — pipeline not yet implemented (Phase 3).
-    Validation is live: bad file types → 422, oversized files → 422.
+    Runs the full LangGraph pipeline:
+      Blood: OCR → Parser → Explainer → Wellness
+      X-Ray: XRay Vision → Explainer → Wellness
     """
 
     # Validate kind
@@ -101,15 +106,91 @@ async def analyze_report(
             ).model_dump(),
         )
 
-    # ── Stub response (replaced in Phase 3) ──
-    return JSONResponse(
-        status_code=501,
-        content=ErrorResponse(
-            error="not_implemented",
-            message="Analysis pipeline is coming soon! Check back after Phase 3 🚧",
-            detail="Pipeline not yet implemented",
-        ).model_dump(),
-    )
+    # ── Run the LangGraph pipeline ──
+    from graph.pipeline import pipeline
+
+    initial_state = {
+        "file_bytes": file_bytes,
+        "file_type": kind,
+        "extracted_text": "",
+        "patient": {},
+        "metrics": [],
+        "findings": [],
+        "summary": {},
+        "conditions": [],
+        "questions": [],
+        "recommendations": [],
+        "wellness": {},
+        "error": None,
+    }
+
+    try:
+        result = await asyncio.wait_for(
+            pipeline.ainvoke(initial_state),
+            timeout=settings.ANALYSIS_TIMEOUT,
+        )
+    except asyncio.TimeoutError:
+        return JSONResponse(
+            status_code=504,
+            content=ErrorResponse(
+                error="timeout",
+                message="That's taking longer than usual. Want to give it another try? 🌀",
+                detail=f"Analysis exceeded {settings.ANALYSIS_TIMEOUT} second timeout",
+            ).model_dump(),
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content=ErrorResponse(
+                error="internal_error",
+                message="Something unexpected happened. Try again — we're working on it 💚",
+                detail=str(e),
+            ).model_dump(),
+        )
+
+    # Check for pipeline errors
+    if result.get("error"):
+        return JSONResponse(
+            status_code=500,
+            content=ErrorResponse(
+                error="pipeline_error",
+                message=result["error"],
+            ).model_dump(),
+        )
+
+    # Build typed response matching frontend interface
+    try:
+        if kind == "blood":
+            return BloodAnalysisResponse(
+                kind="blood",
+                patient=result["patient"],
+                summary=result["summary"],
+                metrics=result["metrics"],
+                conditions=result["conditions"],
+                recommendations=result["recommendations"],
+                questions=result["questions"],
+                wellness=result["wellness"],
+            )
+        else:
+            return XRayAnalysisResponse(
+                kind="xray",
+                patient=result["patient"],
+                summary=result["summary"],
+                findings=result["findings"],
+                conditions=result["conditions"],
+                recommendations=result["recommendations"],
+                questions=result["questions"],
+                wellness=result["wellness"],
+            )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content=ErrorResponse(
+                error="response_validation",
+                message="We got results but had trouble formatting them. Please try again 💚",
+                detail=str(e),
+            ).model_dump(),
+        )
 
 
 # ─── POST /api/chat ──────────────────────────────────────────
@@ -118,14 +199,37 @@ async def analyze_report(
 async def chat_with_results(request: ChatRequest):
     """Chat about analysis results.
 
-    Currently returns 501 — chat agent not yet implemented (Phase 3).
-    Pydantic auto-validates the request body.
+    Uses the standalone chat agent (not part of LangGraph pipeline).
+    Groq primary for speed, Gemini fallback.
     """
-    return JSONResponse(
-        status_code=501,
-        content=ErrorResponse(
-            error="not_implemented",
-            message="Chat is coming soon! Check back after Phase 3 🚧",
-            detail="Chat agent not yet implemented",
-        ).model_dump(),
-    )
+    from agents.chat_agent import chat_agent
+
+    try:
+        result = await asyncio.wait_for(
+            chat_agent(
+                message=request.message,
+                kind=request.kind,
+                context=request.context,
+                history=[m.model_dump() for m in request.history],
+            ),
+            timeout=settings.CHAT_TIMEOUT,
+        )
+        return ChatResponse(**result)
+    except asyncio.TimeoutError:
+        return JSONResponse(
+            status_code=504,
+            content=ErrorResponse(
+                error="timeout",
+                message="Chat is taking a moment — try a shorter question? 🌀",
+                detail=f"Chat exceeded {settings.CHAT_TIMEOUT} second timeout",
+            ).model_dump(),
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content=ErrorResponse(
+                error="chat_error",
+                message="Our chat helper had a hiccup. Please try again 💚",
+                detail=str(e),
+            ).model_dump(),
+        )
