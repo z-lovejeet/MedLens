@@ -1,1 +1,1 @@
-"""MedLens LangGraph pipeline — state, router, graph construction."""
+"""MedLens graph — LangGraph pipeline for medical analysis."""
