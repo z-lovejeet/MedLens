@@ -24,7 +24,7 @@ def compute_scale(min_ref: float, max_ref: float) -> tuple[float, float]:
     """
     range_width = max_ref - min_ref
     padding = range_width * 0.4
-    return round(min_ref - padding, 1), round(max_ref + padding, 1)
+    return round(max(0.0, min_ref - padding), 1), round(max_ref + padding, 1)
 
 
 def classify_status(value: float, min_ref: float, max_ref: float) -> str:
