@@ -78,6 +78,13 @@ export default function App() {
           </AnimatePresence>
         </main>
 
+        {/* Global Ambient Aurora Footer Backdrop (Purple & Green Scheme) */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[650px] overflow-hidden" aria-hidden>
+          <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 560, height: 560, bottom: -140, right: -100, opacity: 0.45, animationDelay: "-4s" }} />
+          <div className="aurora-blob animate-floaty" style={{ background: "#6bb89a", width: 520, height: 520, bottom: -100, left: -80, opacity: 0.45, animationDelay: "-7s" }} />
+          <div className="aurora-blob animate-floaty" style={{ background: "#eba85c", width: 380, height: 380, bottom: -60, left: "45%", opacity: 0.35, animationDelay: "-2s" }} />
+        </div>
+
         <Footer onNavigate={navigate} />
       </div>
 

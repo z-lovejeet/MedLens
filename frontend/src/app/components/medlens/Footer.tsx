@@ -27,14 +27,8 @@ const COLS: { title: string; links: { label: string; page?: PageKey }[] }[] = [
 
 export function Footer({ onNavigate }: FooterProps) {
   return (
-    <footer className="relative mt-24 px-4 pb-8">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6 }}
-        className="mx-auto max-w-6xl overflow-hidden rounded-[32px] clay-lg p-8 sm:p-12"
-      >
+    <footer className="relative mt-24 border-t border-black/[0.06] bg-cream/75 backdrop-blur-md px-4 py-12 sm:px-6">
+      <div className="mx-auto max-w-6xl">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr]">
           {/* Brand */}
           <div>
@@ -48,7 +42,7 @@ export function Footer({ onNavigate }: FooterProps) {
               We turn cold, confusing medical reports into warm, human explanations,
               so you can breathe easier and make calmer decisions about your health.
             </p>
-            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-[13px] font-semibold text-clay-sage">
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-[13px] font-semibold text-clay-sage shadow-xs border border-black/5">
               <ShieldCheck className="size-4" aria-hidden /> Private by design · No data saved
             </div>
           </div>
@@ -62,7 +56,7 @@ export function Footer({ onNavigate }: FooterProps) {
                   <li key={l.label}>
                     <button
                       onClick={() => l.page && onNavigate(l.page)}
-                      className="group inline-flex items-center gap-1 text-[15px] text-clay-muted transition-colors hover:text-clay-terracotta"
+                      className="group inline-flex items-center gap-1 text-[15px] text-clay-muted transition-colors hover:text-clay-terracotta cursor-pointer"
                     >
                       {l.label}
                       <ArrowUpRight className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden />
@@ -74,7 +68,7 @@ export function Footer({ onNavigate }: FooterProps) {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-clay-slate/10 pt-6">
+        <div className="mt-10 border-t border-black/[0.06] pt-6">
           <div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
             <p className="text-[13px] text-clay-muted">
               MedLens is an AI educational assistant, <span className="font-semibold text-clay-slate">not a doctor</span>.
@@ -85,7 +79,7 @@ export function Footer({ onNavigate }: FooterProps) {
             </p>
           </div>
         </div>
-      </motion.div>
+      </div>
     </footer>
   );
 }
