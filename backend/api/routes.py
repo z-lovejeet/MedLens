@@ -9,7 +9,7 @@ Endpoints:
 import asyncio
 from typing import Union
 
-from fastapi import APIRouter, File, Form, UploadFile
+from fastapi import APIRouter, File, Form, UploadFile, Request
 from fastapi.responses import JSONResponse
 
 from api.schemas import (
@@ -69,6 +69,7 @@ async def health_check():
     },
 )
 async def analyze_report(
+    request: Request,
     file: UploadFile = File(...),
     kind: str = Form(...),
 ):
@@ -101,6 +102,18 @@ async def analyze_report(
                 message="We can read PDFs and images (PNG, JPG, WebP). Could you try one of those?",
                 detail=f"Received: {content_type}. Expected: {', '.join(sorted(allowed))}",
             ).model_dump(),
+        )
+
+    # Early size check from Content-Length header (if available)
+    content_length = request.headers.get("content-length")
+    if content_length and int(content_length) > settings.MAX_FILE_SIZE + 1024:  # small buffer for multipart overhead
+        return JSONResponse(
+            status_code=422,
+            content=ErrorResponse(
+                error="file_too_large",
+                message=f"File exceeds the {settings.MAX_FILE_SIZE // (1024*1024)}MB size limit.",
+                detail=f"Received via header: {content_length} bytes. Max: {settings.MAX_FILE_SIZE} bytes"
+            ).model_dump()
         )
 
     # Validate file size
