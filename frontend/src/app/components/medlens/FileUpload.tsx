@@ -1,15 +1,20 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
-import { FileText, Activity, Stethoscope, ScanLine, ShieldCheck } from "lucide-react";
+import {
+  FileText,
+  Activity,
+  Stethoscope,
+  ScanLine,
+  ShieldCheck,
+} from "lucide-react";
 import { toast } from "sonner";
+import type { Kind } from "../../lib/types";
 import { fadeUp } from "./anim";
-
-type Kind = "blood" | "xray";
 
 interface FileUploadProps {
   kind: Kind;
-  onAnalyze: (fileName: string) => void;
-  onPreviewError?: () => void;
+  onAnalyze: (file: File) => void;
+  onSample: () => void;
 }
 
 const ACCEPTED = ["application/pdf", "image/png", "image/jpeg"];
@@ -53,7 +58,7 @@ const COPY: Record<
   },
 };
 
-export function FileUpload({ kind, onAnalyze, onPreviewError }: FileUploadProps) {
+export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const c = COPY[kind];
@@ -73,7 +78,7 @@ export function FileUpload({ kind, onAnalyze, onPreviewError }: FileUploadProps)
       });
       return;
     }
-    onAnalyze(file.name);
+    onAnalyze(file);
   };
 
   const handleFiles = (files: FileList | null) => {
@@ -82,15 +87,28 @@ export function FileUpload({ kind, onAnalyze, onPreviewError }: FileUploadProps)
   };
 
   return (
-    <section aria-labelledby="upload-heading" className="mx-auto max-w-3xl px-4">
-      <motion.div variants={fadeUp} initial="hidden" animate="show" className="mb-8 text-center">
+    <section
+      aria-labelledby="upload-heading"
+      className="mx-auto max-w-3xl px-4"
+    >
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        animate="show"
+        className="mb-8 text-center"
+      >
         <span className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-1.5 text-[13px] font-semibold text-clay-terracotta">
           <DropIcon className="size-3.5" aria-hidden /> {c.step}
         </span>
-        <h1 id="upload-heading" className="mt-4 font-display text-[34px] font-bold leading-tight text-clay-slate sm:text-[42px]">
+        <h1
+          id="upload-heading"
+          className="mt-4 font-display text-[34px] font-bold leading-tight text-clay-slate sm:text-[42px]"
+        >
           {c.heading}
         </h1>
-        <p className="mx-auto mt-3 max-w-lg text-[16px] leading-relaxed text-clay-muted">{c.sub}</p>
+        <p className="mx-auto mt-3 max-w-lg text-[16px] leading-relaxed text-clay-muted">
+          {c.sub}
+        </p>
       </motion.div>
 
       <motion.div
@@ -111,7 +129,8 @@ export function FileUpload({ kind, onAnalyze, onPreviewError }: FileUploadProps)
         className={`rounded-[30px] p-2 transition-colors ${dragging ? "bg-clay-terracotta/15" : "bg-transparent"}`}
       >
         <label htmlFor="report-file" className="sr-only">
-          Upload a {kind === "xray" ? "chest X-ray" : "medical report"} (PDF, PNG, or JPG, max 10MB)
+          Upload a {kind === "xray" ? "chest X-ray" : "medical report"} (PDF,
+          PNG, or JPG, max 10MB)
         </label>
         <button
           type="button"
@@ -141,26 +160,22 @@ export function FileUpload({ kind, onAnalyze, onPreviewError }: FileUploadProps)
         />
 
         <p className="mt-4 flex items-center justify-center gap-2 text-[13px] font-semibold text-clay-sage">
-          <ShieldCheck className="size-4" aria-hidden /> Processed privately in your session — never saved.
+          <ShieldCheck className="size-4" aria-hidden /> Processed privately in
+          your session — never saved.
         </p>
-
-        {onPreviewError && (
-          <p className="mt-2 text-center">
-            <button
-              onClick={onPreviewError}
-              className="rounded-full text-[13px] text-clay-muted underline decoration-dotted underline-offset-4 hover:text-clay-terracotta"
-            >
-              See how we handle hiccups
-            </button>
-          </p>
-        )}
 
         <div className="mt-4">
           <SampleButton
-            icon={kind === "xray" ? <Activity className="size-5" aria-hidden /> : <FileText className="size-5" aria-hidden />}
+            icon={
+              kind === "xray" ? (
+                <Activity className="size-5" aria-hidden />
+              ) : (
+                <FileText className="size-5" aria-hidden />
+              )
+            }
             title={c.sampleTitle}
             subtitle={c.sampleSub}
-            onClick={() => onAnalyze(c.sampleFile)}
+            onClick={onSample}
           />
         </div>
       </motion.div>
@@ -190,7 +205,9 @@ function SampleButton({
         {icon}
       </span>
       <span>
-        <span className="block font-display font-semibold text-clay-slate">{title}</span>
+        <span className="block font-display font-semibold text-clay-slate">
+          {title}
+        </span>
         <span className="block text-[13px] text-clay-muted">{subtitle}</span>
       </span>
     </motion.button>
