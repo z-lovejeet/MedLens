@@ -55,7 +55,7 @@ export const BLOOD_REPORT: Metric[] = [
     status: "optimal",
     tag: "Optimal",
     plain:
-      "Hemoglobin is the part of your blood that carries oxygen around your body. Yours is right in the healthy zone — think of it like a delivery service running perfectly on time.",
+      "Hemoglobin is the part of your blood that carries oxygen around your body. Yours is right in the healthy zone. Think of it like a delivery service running perfectly on time.",
   },
   {
     id: "wbc",
@@ -83,7 +83,7 @@ export const BLOOD_REPORT: Metric[] = [
     status: "attention",
     tag: "Worth Asking Doctor",
     plain:
-      "Cholesterol is a waxy substance your body needs in small amounts. Yours is a bit above the comfy range. Small food and movement tweaks often help — a good thing to chat about at your next visit.",
+      "Cholesterol is a waxy substance your body needs in small amounts. Yours is a bit above the comfy range. Small food and movement tweaks often help, and that's a good thing to chat about at your next visit.",
   },
   {
     id: "glu",
@@ -97,7 +97,7 @@ export const BLOOD_REPORT: Metric[] = [
     status: "optimal",
     tag: "Optimal",
     plain:
-      "Glucose is the sugar your body uses for energy. Measured after fasting, yours sits comfortably in the healthy range — nice and steady.",
+      "Glucose is the sugar your body uses for energy. Measured after fasting, yours sits comfortably in the healthy range, nice and steady.",
   },
   {
     id: "plt",
@@ -125,7 +125,7 @@ export const BLOOD_REPORT: Metric[] = [
     status: "borderline",
     tag: "Slightly Low",
     plain:
-      "Vitamin D helps keep your bones and mood strong, and mostly comes from sunshine. Yours is a touch low — a bit more daylight or a supplement can gently nudge it up.",
+      "Vitamin D helps keep your bones and mood strong, and mostly comes from sunshine. Yours is a touch low. A bit more daylight or a supplement can gently nudge it up.",
   },
 ];
 
@@ -157,7 +157,7 @@ export const WELLNESS: Record<
     label: "Nutrition",
     tips: [
       { title: "Add a fiber friend", body: "Swap one refined snack for oats, beans, or fruit to gently support your cholesterol." },
-      { title: "Colorful plates", body: "Aim for two colors of veg at each meal — antioxidants love variety." },
+      { title: "Colorful plates", body: "Aim for two colors of veg at each meal. Antioxidants love variety." },
       { title: "Hydrate first", body: "Start the day with a glass of water before coffee to keep energy steady." },
     ],
   },
@@ -201,19 +201,19 @@ export interface Recommendation {
 }
 
 export const BLOOD_SUMMARY = {
-  headline: "Mostly great news — your report looks healthy and balanced.",
-  body: "Most of your markers sit comfortably in the healthy range. A few gentle things are worth a friendly chat with your doctor, but there's nothing alarming here. Take a breath — you're doing well.",
+  headline: "Mostly great news! Your report looks healthy and balanced.",
+  body: "Most of your markers sit comfortably in the healthy range. A few gentle things are worth a friendly chat with your doctor, but there's nothing alarming here. Take a breath, you're doing well.",
 };
 
 export const BLOOD_RECOMMENDATIONS: Recommendation[] = [
   { icon: Salad, title: "Nudge your cholesterol gently", body: "Swap one refined snack a day for oats, beans, or fruit. Small, steady fiber wins add up." },
   { icon: Footprints, title: "Three movement snacks", body: "Ten-minute walks after meals help both cholesterol and glucose feel more settled." },
-  { icon: Leaf, title: "A little more sunshine", body: "Your Vitamin D is slightly low — a short daily walk outdoors is a cozy two-for-one." },
+  { icon: Leaf, title: "A little more sunshine", body: "Your Vitamin D is slightly low. A short daily walk outdoors is a cozy two-for-one." },
 ];
 
 export const XRAY_SUMMARY = {
-  headline: "Good news — your lungs look clear and healthy.",
-  body: "Our vision model found no strong signs of concern across the major regions we check. Remember, this is a friendly first look to help you understand the scan — not a diagnosis.",
+  headline: "Good news! Your lungs look clear and healthy.",
+  body: "Our vision model found no strong signs of concern across the major regions we check. Remember, this is a friendly first look to help you understand the scan, not a diagnosis.",
 };
 
 export const XRAY_RECOMMENDATIONS: Recommendation[] = [
@@ -285,7 +285,7 @@ export const BLOOD_CONDITIONS: Condition[] = [
     name: "High Cholesterol",
     chance: 62,
     status: "attention",
-    blurb: "Your total cholesterol is a little above the comfy zone — worth a friendly chat and some gentle diet tweaks.",
+    blurb: "Your total cholesterol is a little above the comfy zone, so it's worth a friendly chat and some gentle diet tweaks.",
   },
   {
     name: "Pre-diabetes",
@@ -297,7 +297,7 @@ export const BLOOD_CONDITIONS: Condition[] = [
     name: "Vitamin D deficiency",
     chance: 45,
     status: "borderline",
-    blurb: "Your Vitamin D is slightly low — a touch more sunshine or a supplement can help.",
+    blurb: "Your Vitamin D is slightly low. A touch more sunshine or a supplement can help.",
   },
 ];
 
@@ -330,7 +330,7 @@ export const XRAY_CONDITIONS: Condition[] = [
 
 /* ===== Questions to ask your doctor ===== */
 export const BLOOD_QUESTIONS: string[] = [
-  "My cholesterol is slightly high — should I retest in a few months or start changes now?",
+  "My cholesterol is slightly high. Should I retest in a few months or start changes now?",
   "Would a diet or exercise plan help nudge my Vitamin D and cholesterol gently?",
   "Are my mildly elevated white blood cells anything to keep an eye on?",
   "How often should I repeat this blood panel to track my progress?",
