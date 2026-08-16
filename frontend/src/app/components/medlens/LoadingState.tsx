@@ -38,7 +38,7 @@ export function LoadingState({ fileName, onDone }: LoadingStateProps) {
           Our AI team is on it
         </h1>
         <p className="mt-1 text-clay-muted">
-          Reading <span className="font-semibold text-clay-slate">{fileName}</span> — this takes a few cozy seconds.
+          Reading <span className="font-semibold text-clay-slate">{fileName}</span> . This takes a few cozy seconds.
         </p>
       </div>
 
