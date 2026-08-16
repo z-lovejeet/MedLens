@@ -7,6 +7,7 @@ const LINKS: { key: PageKey; label: string }[] = [
   { key: "home", label: "Home" },
   { key: "report", label: "Report Analyzer" },
   { key: "xray", label: "X-Ray Analyzer" },
+  { key: "history", label: "History" },
   { key: "about", label: "About" },
   { key: "privacy", label: "Privacy & Ethics" },
 ];
