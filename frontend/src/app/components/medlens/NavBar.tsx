@@ -36,7 +36,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-black/[0.06] transition-colors">
+    <header className="sticky top-0 z-40 bg-cream/75 backdrop-blur-md border-b border-black/[0.04] transition-colors">
       <nav
         aria-label="Primary"
         className="mx-auto flex max-w-6xl items-center gap-4 px-4 sm:px-6 py-3.5"

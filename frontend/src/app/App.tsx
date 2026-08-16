@@ -39,7 +39,14 @@ export default function App() {
         Skip to main content
       </a>
 
-      <div className="min-h-screen bg-cream">
+      <div className="min-h-screen bg-cream relative overflow-x-hidden">
+        {/* Global Ambient Aurora Header Backdrop (Purple & Green Scheme) */}
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-[650px] overflow-hidden" aria-hidden>
+          <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 560, height: 560, top: -140, left: -100, opacity: 0.45 }} />
+          <div className="aurora-blob animate-floaty" style={{ background: "#6bb89a", width: 520, height: 520, top: -100, right: -80, opacity: 0.45, animationDelay: "-3s" }} />
+          <div className="aurora-blob animate-floaty" style={{ background: "#eba85c", width: 380, height: 380, top: -60, left: "35%", opacity: 0.35, animationDelay: "-5s" }} />
+        </div>
+
         <DisclaimerModal open={!accepted} onAccept={() => { setAccepted(true); localStorage.setItem('medlens-disclaimer', 'true'); }} />
 
         <NavBar page={page} onNavigate={navigate} onUpload={() => navigate("report")} />
