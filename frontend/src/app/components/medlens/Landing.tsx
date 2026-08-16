@@ -216,19 +216,61 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
       </section>
 
       {/* Testimonial */}
-      <section className="relative z-10 mx-auto max-w-3xl px-4 py-12">
-        <motion.figure variants={softScale} initial="hidden" whileInView="show" viewport={{ once: true }} className="rounded-[28px] glass p-8 text-center">
-          <div className="mb-3 flex justify-center gap-1 text-clay-amber" aria-label="5 out of 5 stars">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="size-5 fill-current" aria-hidden />
-            ))}
-          </div>
-          <blockquote className="font-display text-[22px] font-semibold leading-relaxed text-clay-slate">
-            “For the first time I understood my blood work without spiraling into panic. It felt
-            like a kind friend sitting beside me.”
-          </blockquote>
-          <figcaption className="mt-4 text-[14px] font-semibold text-clay-muted">Priya · early access user</figcaption>
-        </motion.figure>
+      <section className="relative z-10 mx-auto max-w-5xl px-4 py-12">
+        <motion.h2
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="mb-8 text-center font-display text-2xl font-bold text-clay-slate"
+        >
+          Loved by early access users
+        </motion.h2>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Review 1 */}
+          <motion.figure variants={fadeUp} custom={0} initial="hidden" whileInView="show" viewport={{ once: true }} className="rounded-[24px] clay bg-clay-white p-6">
+            <div className="mb-3 flex gap-1 text-clay-amber" aria-label="5 out of 5 stars">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="size-4 fill-current" aria-hidden />
+              ))}
+            </div>
+            <blockquote className="text-[15px] leading-relaxed text-clay-slate">
+              "For the first time I understood my blood work without spiraling into panic. It felt
+              like a kind friend sitting beside me."
+            </blockquote>
+            <figcaption className="mt-4 text-[13px] font-semibold text-clay-muted">Priya · early access user</figcaption>
+          </motion.figure>
+
+          {/* Review 2 - Mother */}
+          <motion.figure variants={fadeUp} custom={1} initial="hidden" whileInView="show" viewport={{ once: true }} className="rounded-[24px] clay bg-clay-white p-6">
+            <div className="mb-3 flex gap-1 text-clay-amber" aria-label="5 out of 5 stars">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="size-4 fill-current" aria-hidden />
+              ))}
+            </div>
+            <blockquote className="text-[15px] leading-relaxed text-clay-slate">
+              "My son showed me this after my routine checkup. I finally understood why the
+              doctor said my vitamin D was low and what I could actually do about it. So
+              simple even I could use it!"
+            </blockquote>
+            <figcaption className="mt-4 text-[13px] font-semibold text-clay-muted">Sunita S. · early access user</figcaption>
+          </motion.figure>
+
+          {/* Review 3 - Father */}
+          <motion.figure variants={fadeUp} custom={2} initial="hidden" whileInView="show" viewport={{ once: true }} className="rounded-[24px] clay bg-clay-white p-6">
+            <div className="mb-3 flex gap-1 text-clay-amber" aria-label="5 out of 5 stars">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="size-4 fill-current" aria-hidden />
+              ))}
+            </div>
+            <blockquote className="text-[15px] leading-relaxed text-clay-slate">
+              "I used to just file my reports away and forget about them. Now I actually
+              read the explanations and the lifestyle tips are genuinely helpful. Shared it
+              with my whole office."
+            </blockquote>
+            <figcaption className="mt-4 text-[13px] font-semibold text-clay-muted">Rajesh S. · early access user</figcaption>
+          </motion.figure>
+        </div>
       </section>
 
       {/* CTA */}
