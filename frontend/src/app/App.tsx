@@ -7,6 +7,7 @@ import { Landing } from "./components/medlens/Landing";
 import { AnalyzerFlow } from "./components/medlens/AnalyzerFlow";
 import { AboutPage } from "./components/medlens/AboutPage";
 import { PrivacyPage } from "./components/medlens/PrivacyPage";
+import { HistoryPage } from "./components/medlens/HistoryPage";
 import { DisclaimerModal } from "./components/medlens/Disclaimer";
 import { pageVariants, type PageKey } from "./components/medlens/anim";
 
@@ -60,6 +61,8 @@ export default function App() {
               {page === "report" && <AnalyzerFlow key="report" kind="blood" />}
 
               {page === "xray" && <AnalyzerFlow key="xray" kind="xray" />}
+
+              {page === "history" && <HistoryPage onNavigate={navigate} />}
 
               {page === "about" && <AboutPage onCta={() => navigate("report")} />}
 
