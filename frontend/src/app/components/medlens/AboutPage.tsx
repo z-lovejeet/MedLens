@@ -50,17 +50,17 @@ export function AboutPage({ onCta }: AboutPageProps) {
       >
         <p className="text-[18px] leading-relaxed text-clay-slate/90">
           A few years ago, one of us sat with a parent who'd just been handed a page full of
-          numbers and arrows. No explanation. No comfort. Just <span className="font-semibold text-clay-slate">“your levels are off — see a specialist.”</span>
+          numbers and arrows. No explanation. No comfort. Just <span className="font-semibold text-clay-slate">“your levels are off, see a specialist.”</span>
         </p>
         <p className="mt-4 text-[17px] leading-relaxed text-clay-muted">
-          That night was long. Not because the news was bad — it wasn't — but because
+          That night was long. Not because the news was bad (it wasn't) but because
           <em> not understanding</em> is its own kind of fear. We built MedLens so that no one
           has to sit alone with a page they can't read. Health information should feel like a
           kind friend leaning over your shoulder, not a locked door.
         </p>
         <p className="mt-4 text-[17px] leading-relaxed text-clay-muted">
           Today, MedLens turns blood work, lab panels, and chest X-rays into warm, plain-language
-          explanations — with gentle, doable next steps. We'll never replace your doctor. We just
+          explanations with gentle, doable next steps. We'll never replace your doctor. We just
           make the walk to their office a little less scary.
         </p>
       </motion.section>
