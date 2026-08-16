@@ -1,7 +1,8 @@
 import { useId } from "react";
 import { motion } from "motion/react";
 import { ShieldPlus } from "lucide-react";
-import { STATUS_META, type Condition } from "./data";
+import type { Condition } from "../../lib/types";
+import { STATUS_META } from "./data";
 import { fadeUp, stagger } from "./anim";
 
 export function ConditionsSection({
@@ -21,7 +22,10 @@ export function ConditionsSection({
           <ShieldPlus className="size-5" aria-hidden />
         </span>
         <div>
-          <h2 id={headingId} className="font-display text-[18px] font-bold text-clay-slate">
+          <h2
+            id={headingId}
+            className="font-display text-[18px] font-bold text-clay-slate"
+          >
             {title}
           </h2>
           <p className="text-[14px] text-clay-muted">{subtitle}</p>
@@ -47,7 +51,11 @@ export function ConditionsSection({
             >
               <div className="flex items-center justify-between gap-3">
                 <h3 className="flex items-center gap-2 font-display font-bold text-clay-slate">
-                  <Icon className="size-4" style={{ color: meta.color }} aria-hidden />
+                  <Icon
+                    className="size-4"
+                    style={{ color: meta.color }}
+                    aria-hidden
+                  />
                   {c.name}
                 </h3>
                 <span
@@ -74,10 +82,15 @@ export function ConditionsSection({
                   style={{ background: meta.color }}
                 />
               </div>
-              <p className="mt-1.5 text-[12px] font-semibold" style={{ color: meta.color }}>
+              <p
+                className="mt-1.5 text-[12px] font-semibold"
+                style={{ color: meta.color }}
+              >
                 {meta.label} likelihood
               </p>
-              <p className="mt-2 text-[14px] leading-relaxed text-clay-muted">{c.blurb}</p>
+              <p className="mt-2 text-[14px] leading-relaxed text-clay-muted">
+                {c.blurb}
+              </p>
             </motion.article>
           );
         })}
