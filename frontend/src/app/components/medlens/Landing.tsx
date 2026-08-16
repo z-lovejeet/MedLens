@@ -37,9 +37,9 @@ const STEPS = [
 ];
 
 const TRUST = [
-  { icon: Lock, label: "No data saved" },
-  { icon: ShieldCheck, label: "Clinician-verified framework" },
-  { icon: Accessibility, label: "WCAG 2.2 AA" },
+  { icon: Lock, label: "Client-Side State · Privacy-First" },
+  { icon: ShieldCheck, label: "Evidence-Based Reference Ranges" },
+  { icon: Accessibility, label: "Full Keyboard & Screen Reader Ready" },
 ];
 
 export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
@@ -58,7 +58,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
             variants={fadeUp} initial="hidden" animate="show"
             className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-1.5 text-[13px] font-semibold text-clay-terracotta"
           >
-            <Sparkles className="size-3.5" aria-hidden /> Multi-agent AI, made human
+            <Sparkles className="size-3.5" aria-hidden /> LangGraph Multi-Agent Clinical NLP & Vision
           </motion.span>
 
           <motion.h1
