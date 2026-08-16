@@ -31,7 +31,7 @@ interface MedLensStore {
   kind: Kind | null;
   stage: Stage;
   fileName: string;
-  uploadedImageUrl?: string;
+  uploadedImageUrl: string | null;
   result: AnalysisResponse | null;
   error: AnalysisErrorType | null;
 
@@ -90,6 +90,7 @@ export const useMedLensStore = create<MedLensStore>()(
       kind: null,
       stage: "idle",
       fileName: "",
+      uploadedImageUrl: null,
       result: null,
       error: null,
 
@@ -101,10 +102,13 @@ export const useMedLensStore = create<MedLensStore>()(
 
       // ── analyze() ──────────────────────────────────────────
       analyze: async (file, kind) => {
+        const imageUrl = kind === "xray" ? URL.createObjectURL(file) : null;
+
         set({
           kind,
           stage: "loading",
           fileName: file.name,
+          uploadedImageUrl: imageUrl,
           result: null,
           error: null,
           chatMessages: [],
@@ -221,6 +225,7 @@ export const useMedLensStore = create<MedLensStore>()(
               kind === "blood"
                 ? "sample_blood_report.pdf"
                 : "sample_xray.jpg",
+            uploadedImageUrl: null,
             result,
             error: null,
             chatMessages: [],
@@ -234,20 +239,27 @@ export const useMedLensStore = create<MedLensStore>()(
       setStage: (stage) => set({ stage }),
 
       // ── reset() ───────────────────────────────────────────
-      reset: () =>
+      reset: () => {
+        const { uploadedImageUrl } = get();
+        if (uploadedImageUrl) {
+          URL.revokeObjectURL(uploadedImageUrl);
+        }
         set({
           kind: null,
           stage: "idle",
           result: null,
           error: null,
           fileName: "",
+          uploadedImageUrl: null,
           chatMessages: [],
           chatLoading: false,
           suggestedQuestions: [],
-        }),
+        });
+      },
 
       // ── sendChat() ────────────────────────────────────────
       sendChat: async (message) => {
+        if (get().chatLoading) return;
         const { result, kind, chatMessages } = get();
         if (!result || !kind) return;
 
