@@ -319,7 +319,7 @@ export const useMedLensStore = create<MedLensStore>()(
         set({
           kind: entry.kind,
           stage: "results",
-          fileName: `${entry.patientName} — ${entry.date.split("T")[0]}`,
+          fileName: `${entry.patientName} (${entry.date.split("T")[0]})`,
           result: entry.result,
           error: null,
           chatMessages: [],
