@@ -30,17 +30,26 @@ export async function analyzeReport(
   formData.append("file", file);
   formData.append("kind", kind);
 
-  const res = await fetch(`${API_URL}/api/analyze`, {
-    method: "POST",
-    body: formData,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/api/analyze`, {
+      method: "POST",
+      body: formData,
+    });
+  } catch (error) {
+    throw new ApiError("network_error", "Could not connect to the server. Please check your connection and try again.", 0);
+  }
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({
       error: "network_error",
       message: "Couldn't reach our servers. Check your connection and try again.",
     }));
-    throw new ApiError(err.error, err.message, res.status);
+    throw new ApiError(
+      err.error || "server_error",
+      err.message || (typeof err.detail === "string" ? err.detail : "An unexpected error occurred."),
+      res.status
+    );
   }
 
   return res.json();
@@ -57,18 +66,27 @@ export async function sendChatMessage(
   // Strip timestamps — backend schema only expects { role, content }
   const cleanHistory = history.map(({ role, content }) => ({ role, content }));
 
-  const res = await fetch(`${API_URL}/api/chat`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, kind, context, history: cleanHistory }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, kind, context, history: cleanHistory }),
+    });
+  } catch (error) {
+    throw new ApiError("network_error", "Could not connect to the server. Please check your connection and try again.", 0);
+  }
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({
       error: "chat_error",
       message: "I'm having a little trouble right now. Try again in a moment 💚",
     }));
-    throw new ApiError(err.error, err.message, res.status);
+    throw new ApiError(
+      err.error || "server_error",
+      err.message || (typeof err.detail === "string" ? err.detail : "An unexpected error occurred."),
+      res.status
+    );
   }
 
   return res.json();
