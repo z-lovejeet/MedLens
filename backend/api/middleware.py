@@ -14,6 +14,9 @@ from fastapi.responses import JSONResponse
 from api.schemas import ErrorResponse
 from core.config import settings
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 # ─── Rate Limiter ────────────────────────────────────────────
 
@@ -27,6 +30,23 @@ class RateLimiter:
 
     def __init__(self):
         self.windows: dict[str, list[float]] = defaultdict(list)
+        self.cleanup_counter = 0
+
+    def _cleanup_stale_keys(self):
+        """Remove keys with no recent timestamps."""
+        now = time.time()
+        stale_keys = [
+            key for key, timestamps in self.windows.items()
+            if not timestamps or (now - timestamps[-1]) > 120  # 2 minutes of inactivity
+        ]
+        for key in stale_keys:
+            del self.windows[key]
+
+    def _get_client_ip(self, request: Request) -> str:
+        forwarded = request.headers.get("x-forwarded-for")
+        if forwarded:
+            return forwarded.split(",")[0].strip()
+        return request.client.host if request.client else "unknown"
 
     def is_allowed(self, key: str, limit: int, window_seconds: int = 60) -> bool:
         """Check if a request is within the rate limit.
@@ -39,6 +59,11 @@ class RateLimiter:
         Returns:
             True if the request is allowed, False if rate-limited
         """
+        self.cleanup_counter += 1
+        if self.cleanup_counter >= 100:
+            self._cleanup_stale_keys()
+            self.cleanup_counter = 0
+
         now = time.time()
         cutoff = now - window_seconds
 
@@ -74,7 +99,7 @@ async def rate_limit_middleware(request: Request, call_next):
 
     if path in RATE_LIMITS:
         limit, window = RATE_LIMITS[path]
-        client_ip = request.client.host if request.client else "unknown"
+        client_ip = rate_limiter._get_client_ip(request)
         key = f"{client_ip}:{path}"
 
         if not rate_limiter.is_allowed(key, limit, window):
@@ -98,11 +123,8 @@ async def global_exception_handler(request: Request, exc: Exception):
 
     Prevents raw stack traces from reaching the client.
     """
+    logger.error(f"Unhandled exception on {request.url.path}: {exc}", exc_info=True)
     return JSONResponse(
         status_code=500,
-        content=ErrorResponse(
-            error="internal_error",
-            message="Something unexpected happened. Try again — we're working on it 💚",
-            detail=str(exc),
-        ).model_dump(),
+        content={"detail": "An internal server error occurred. Please try again later."}
     )
