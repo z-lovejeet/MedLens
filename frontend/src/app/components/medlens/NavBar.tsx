@@ -39,7 +39,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
     <header className="sticky top-0 z-40 px-4 pt-4">
       <nav
         aria-label="Primary"
-        className="mx-auto flex max-w-6xl items-center gap-4 rounded-[24px] glass px-5 py-3"
+        className="mx-auto flex max-w-6xl items-center gap-4 rounded-[24px] bg-clay-white/92 backdrop-blur-md px-5 py-3 shadow-[0_12px_32px_-8px_rgba(50,44,74,0.12),inset_0_2px_4px_0_rgba(255,255,255,0.95),inset_0_-2px_4px_0_rgba(50,44,74,0.04)] border border-white/80"
       >
         <button
           onClick={() => onNavigate("home")}
@@ -61,14 +61,14 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
                   onClick={() => onNavigate(l.key)}
                   aria-current={active ? "page" : undefined}
                   className={`relative rounded-full px-4 py-2 text-[15px] transition-colors ${
-                    active ? "text-clay-slate" : "text-clay-muted hover:text-clay-slate hover:bg-white/60"
+                    active ? "text-clay-slate font-bold" : "text-clay-muted hover:text-clay-slate hover:bg-white/60 font-medium"
                   }`}
                 >
                   {l.label}
                   {active && (
                     <motion.span
                       layoutId="nav-pill"
-                      className="absolute inset-0 -z-10 rounded-full bg-white/70 clay"
+                      className="absolute inset-0 -z-10 rounded-full bg-white shadow-xs border border-black/5"
                       transition={{ type: "spring", stiffness: 400, damping: 32 }}
                     />
                   )}
@@ -93,7 +93,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="grid size-10 place-items-center rounded-[14px] bg-white/70 text-clay-slate clay lg:hidden"
+            className="grid size-10 place-items-center rounded-[14px] bg-white text-clay-slate shadow-xs border border-black/5 lg:hidden cursor-pointer"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -109,7 +109,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-[22px] glass p-2 lg:hidden"
+            className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-[22px] bg-clay-white/95 backdrop-blur-md p-2 shadow-lg border border-white/80 lg:hidden"
           >
             {LINKS.map((l) => (
               <li key={l.key}>
