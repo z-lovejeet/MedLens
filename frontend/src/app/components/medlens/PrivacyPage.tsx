@@ -54,8 +54,7 @@ export function PrivacyPage() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
-        className="relative z-10 mt-10 rounded-[28px] p-8 sm:p-10 shadow-sm"
-        style={{ background: "linear-gradient(135deg, #efe7f5, #e6dcf0)" }}
+        className="relative z-10 mt-10 rounded-[28px] clay-lg bg-clay-white p-8 sm:p-10"
       >
         <div className="flex items-start gap-4">
           <span className="grid size-14 shrink-0 place-items-center rounded-[20px] bg-clay-terracotta text-white clay-btn">
