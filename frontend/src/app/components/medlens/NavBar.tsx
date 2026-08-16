@@ -36,14 +36,14 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 px-4 pt-4">
+    <header className="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-black/[0.06] transition-colors">
       <nav
         aria-label="Primary"
-        className="mx-auto flex max-w-6xl items-center gap-4 rounded-[24px] bg-clay-white/92 backdrop-blur-md px-5 py-3 shadow-[0_12px_32px_-8px_rgba(50,44,74,0.12),inset_0_2px_4px_0_rgba(255,255,255,0.95),inset_0_-2px_4px_0_rgba(50,44,74,0.04)] border border-white/80"
+        className="mx-auto flex max-w-6xl items-center gap-4 px-4 sm:px-6 py-3.5"
       >
         <button
           onClick={() => onNavigate("home")}
-          className="flex items-center gap-2.5 rounded-full font-display text-[20px] font-bold text-clay-slate"
+          className="flex items-center gap-2.5 rounded-full font-display text-[20px] font-bold text-clay-slate cursor-pointer"
           aria-label="MedLens home"
         >
           <span className="grid size-9 place-items-center rounded-[14px] bg-clay-terracotta text-white clay-btn">
@@ -52,7 +52,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
           MedLens
         </button>
 
-        <ul className="mx-auto hidden items-center gap-1 lg:flex">
+        <ul className="mx-auto hidden items-center gap-1.5 lg:flex">
           {LINKS.map((l) => {
             const active = page === l.key;
             return (
@@ -60,8 +60,10 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
                 <button
                   onClick={() => onNavigate(l.key)}
                   aria-current={active ? "page" : undefined}
-                  className={`relative rounded-full px-4 py-2 text-[15px] transition-colors ${
-                    active ? "text-clay-slate font-bold" : "text-clay-muted hover:text-clay-slate hover:bg-white/60 font-medium"
+                  className={`relative rounded-full px-4 py-2 text-[15px] transition-colors cursor-pointer ${
+                    active
+                      ? "text-clay-slate font-bold"
+                      : "text-clay-muted hover:text-clay-slate hover:bg-white/50 font-medium"
                   }`}
                 >
                   {l.label}
@@ -83,7 +85,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
             whileHover={{ scale: 1.03, y: -1 }}
             whileTap={{ scale: 0.97, y: 2 }}
             onClick={onUpload}
-            className="flex items-center gap-2 rounded-full bg-clay-terracotta px-5 py-2.5 font-display font-semibold text-white clay-btn"
+            className="flex items-center gap-2 rounded-full bg-clay-terracotta px-5 py-2.5 font-display font-semibold text-white clay-btn cursor-pointer"
           >
             <Upload className="size-4" aria-hidden />
             <span className="hidden sm:inline">Upload Report</span>
@@ -109,7 +111,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-[22px] bg-clay-white/95 backdrop-blur-md p-2 shadow-lg border border-white/80 lg:hidden"
+            className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-[22px] bg-cream/95 backdrop-blur-md p-2 shadow-lg border border-black/5 lg:hidden"
           >
             {LINKS.map((l) => (
               <li key={l.key}>
@@ -119,8 +121,8 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
                     setOpen(false);
                   }}
                   aria-current={page === l.key ? "page" : undefined}
-                  className={`w-full rounded-[16px] px-4 py-3 text-left font-display font-semibold transition-colors ${
-                    page === l.key ? "bg-white/70 text-clay-slate clay" : "text-clay-muted hover:bg-white/50"
+                  className={`w-full rounded-[16px] px-4 py-3 text-left font-display font-semibold transition-colors cursor-pointer ${
+                    page === l.key ? "bg-white text-clay-slate shadow-xs" : "text-clay-muted hover:bg-white/50"
                   }`}
                 >
                   {l.label}
