@@ -47,13 +47,34 @@ export function HistoryPage({ onNavigate }: HistoryPageProps) {
         
         <div className="flex items-center">
           {confirmClearAll ? (
-            <div role="alert" className="flex items-center gap-3 bg-clay-rust/10 text-clay-slate px-3 py-1.5 rounded-full text-[13px] font-semibold">
-              <span>Delete all analyses?</span>
-              <button onClick={() => { clearAllHistory(); setConfirmClearAll(false); }} className="text-clay-coral hover:underline">Yes, clear all</button>
-              <button onClick={() => setConfirmClearAll(false)} className="text-clay-muted hover:underline">Cancel</button>
+            <div
+              role="alert"
+              className="flex items-center gap-2.5 rounded-full border border-clay-coral/25 bg-clay-coral/10 px-3.5 py-1.5 text-[13px] font-semibold text-clay-slate shadow-xs"
+            >
+              <span className="flex items-center gap-1.5 font-bold text-clay-slate">
+                <Trash2 className="size-3.5 text-clay-coral" /> Clear entire history?
+              </span>
+              <button
+                onClick={() => setConfirmClearAll(false)}
+                className="rounded-full bg-white px-3 py-1 text-[12px] font-bold text-clay-muted shadow-xs transition-all hover:bg-clay-cream hover:text-clay-slate active:scale-95 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  clearAllHistory();
+                  setConfirmClearAll(false);
+                }}
+                className="rounded-full bg-clay-coral px-3 py-1 text-[12px] font-bold text-white shadow-xs transition-all hover:brightness-105 active:scale-95 cursor-pointer"
+              >
+                Yes, Clear All
+              </button>
             </div>
           ) : (
-            <button onClick={() => setConfirmClearAll(true)} className="text-[13px] font-semibold text-clay-muted hover:text-clay-coral transition-colors flex items-center gap-1.5">
+            <button
+              onClick={() => setConfirmClearAll(true)}
+              className="flex items-center gap-1.5 rounded-full bg-white/80 px-3.5 py-1.5 text-[13px] font-semibold text-clay-muted shadow-xs transition-all hover:bg-white hover:text-clay-coral active:scale-95 cursor-pointer"
+            >
               <Trash2 className="size-4" /> Clear All
             </button>
           )}
@@ -93,11 +114,33 @@ export function HistoryPage({ onNavigate }: HistoryPageProps) {
 
               <div className="flex gap-3 mt-auto pt-3">
                 {confirmDelete === entry.id ? (
-                  <div role="alert" className="flex items-center justify-between w-full text-[13px] font-bold">
-                    <span className="text-clay-slate">Delete this?</span>
-                    <div className="flex gap-3">
-                      <button onClick={() => { deleteFromHistory(entry.id); setConfirmDelete(null); }} className="text-clay-coral hover:underline">Yes</button>
-                      <button onClick={() => setConfirmDelete(null)} className="text-clay-muted hover:underline">Cancel</button>
+                  <div
+                    role="alert"
+                    className="flex w-full items-center justify-between gap-2 rounded-[14px] border border-clay-coral/25 bg-clay-coral/10 p-1.5 shadow-xs"
+                  >
+                    <span className="pl-2 text-[12px] font-bold text-clay-slate flex items-center gap-1.5">
+                      <Trash2 className="size-3.5 text-clay-coral" /> Delete this?
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmDelete(null);
+                        }}
+                        className="rounded-[10px] bg-white px-2.5 py-1 text-[12px] font-bold text-clay-muted shadow-xs transition-all hover:bg-clay-cream hover:text-clay-slate active:scale-95 cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteFromHistory(entry.id);
+                          setConfirmDelete(null);
+                        }}
+                        className="rounded-[10px] bg-clay-coral px-2.5 py-1 text-[12px] font-bold text-white shadow-xs transition-all hover:brightness-105 active:scale-95 cursor-pointer"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 ) : (
