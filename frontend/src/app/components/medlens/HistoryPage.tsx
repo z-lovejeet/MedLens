@@ -20,8 +20,12 @@ export function HistoryPage({ onNavigate }: HistoryPageProps) {
   if (history.length === 0) {
     return (
       <section aria-label="Analysis History" className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 min-h-[60vh] flex flex-col items-center justify-center text-center">
-        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-          <Clock className="size-16 text-clay-muted/30 animate-floaty" />
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+          className="flex items-center justify-center"
+        >
+          <Clock className="size-16 text-clay-muted/35" aria-hidden />
         </motion.div>
         <h1 className="font-display text-xl font-bold text-clay-slate mt-6">No analyses saved yet</h1>
         <p className="text-clay-muted mt-2 text-[15px] max-w-xs">Upload a report to get started!</p>
