@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { UserRound, CalendarDays, VenusAndMars } from "lucide-react";
-import type { Patient } from "./data";
+import type { Patient } from "../../lib/types";
+import { resolveFieldIcon } from "../../lib/icons";
 import { fadeUp, stagger } from "./anim";
 
 export function PatientCard({ patient }: { patient: Patient }) {
@@ -27,7 +28,9 @@ export function PatientCard({ patient }: { patient: Patient }) {
           <div className="inline-flex items-center gap-1.5 rounded-full bg-cream px-3 py-1 text-[12px] font-semibold text-clay-terracotta">
             <UserRound className="size-3.5" aria-hidden /> Patient
           </div>
-          <p className="mt-1 font-display text-[24px] font-bold text-clay-slate">{patient.name}</p>
+          <p className="mt-1 font-display text-[24px] font-bold text-clay-slate">
+            {patient.name}
+          </p>
           <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-clay-muted">
             <span className="inline-flex items-center gap-1.5">
               <CalendarDays className="size-4" aria-hidden /> {patient.age} yrs
@@ -46,7 +49,7 @@ export function PatientCard({ patient }: { patient: Patient }) {
         className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3"
       >
         {patient.fields.map((f) => {
-          const Icon = f.icon;
+          const Icon = resolveFieldIcon(f.label);
           return (
             <motion.div
               key={f.label}
@@ -54,9 +57,12 @@ export function PatientCard({ patient }: { patient: Patient }) {
               className="rounded-[16px] clay-cream p-3.5"
             >
               <dt className="flex items-center gap-1.5 text-[12px] font-semibold text-clay-muted">
-                <Icon className="size-3.5 text-clay-terracotta" aria-hidden /> {f.label}
+                <Icon className="size-3.5 text-clay-terracotta" aria-hidden />{" "}
+                {f.label}
               </dt>
-              <dd className="mt-1 font-display font-bold text-clay-slate">{f.value}</dd>
+              <dd className="mt-1 font-display font-bold text-clay-slate">
+                {f.value}
+              </dd>
             </motion.div>
           );
         })}

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, MessageCircleHeart } from "lucide-react";
-import { Metric, STATUS_META } from "./data";
+import type { Metric } from "../../lib/types";
+import { STATUS_META } from "./data";
 
 export function MetricCard({ metric }: { metric: Metric }) {
   const [open, setOpen] = useState(false);
@@ -10,7 +11,13 @@ export function MetricCard({ metric }: { metric: Metric }) {
 
   const pct = (v: number) => {
     if (metric.scaleMax === metric.scaleMin) return 50;
-    return Math.max(0, Math.min(100, ((v - metric.scaleMin) / (metric.scaleMax - metric.scaleMin)) * 100));
+    return Math.max(
+      0,
+      Math.min(
+        100,
+        ((v - metric.scaleMin) / (metric.scaleMax - metric.scaleMin)) * 100,
+      ),
+    );
   };
   const valuePct = pct(metric.value);
   const rangeLeft = pct(metric.min);
@@ -25,9 +32,13 @@ export function MetricCard({ metric }: { metric: Metric }) {
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="font-display font-bold text-clay-slate">{metric.name}</h3>
+          <h3 className="font-display font-bold text-clay-slate">
+            {metric.name}
+          </h3>
           <p className="mt-0.5 text-clay-muted">
-            <span className="font-display text-[24px] font-bold text-clay-slate">{metric.value}</span>{" "}
+            <span className="font-display text-[24px] font-bold text-clay-slate">
+              {metric.value}
+            </span>{" "}
             <span className="text-[14px]">{metric.unit}</span>
           </p>
         </div>
@@ -45,20 +56,29 @@ export function MetricCard({ metric }: { metric: Metric }) {
         <div className="relative h-3 rounded-full clay-inset bg-cream">
           <div
             className="absolute top-0 h-3 rounded-full opacity-60"
-            style={{ left: `${rangeLeft}%`, width: `${rangeWidth}%`, background: "#81b29a55" }}
+            style={{
+              left: `${rangeLeft}%`,
+              width: `${rangeWidth}%`,
+              background: "#81b29a55",
+            }}
           />
           <motion.div
             initial={{ left: 0 }}
             animate={{ left: `${valuePct}%` }}
             transition={{ type: "spring", stiffness: 120, damping: 18 }}
             className="absolute -top-1 size-5 -translate-x-1/2 rounded-full border-[3px] border-white"
-            style={{ background: meta.color, boxShadow: "0 3px 8px rgba(61,64,91,0.25)" }}
+            style={{
+              background: meta.color,
+              boxShadow: "0 3px 8px rgba(61,64,91,0.25)",
+            }}
             aria-hidden
           />
         </div>
         <div className="mt-1.5 flex justify-between text-[12px] text-clay-muted">
           <span>Healthy: {metric.min}</span>
-          <span>{metric.max} {metric.unit}</span>
+          <span>
+            {metric.max} {metric.unit}
+          </span>
         </div>
       </div>
 
@@ -71,7 +91,9 @@ export function MetricCard({ metric }: { metric: Metric }) {
           <MessageCircleHeart className="size-4 text-clay-terracotta" />
           What this means in plain English
         </span>
-        <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       <AnimatePresence initial={false}>
@@ -83,7 +105,9 @@ export function MetricCard({ metric }: { metric: Metric }) {
             transition={{ duration: 0.25 }}
             className="overflow-hidden"
           >
-            <p className="px-1 pt-3 text-[15px] leading-relaxed text-clay-muted">{metric.plain}</p>
+            <p className="px-1 pt-3 text-[15px] leading-relaxed text-clay-muted">
+              {metric.plain}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
