@@ -230,7 +230,7 @@ export function XRayViewer({ onReset }: { onReset: () => void }) {
       <ConditionsSection
         conditions={conditions}
         title="What we screened for"
-        subtitle="Likelihood of common chest findings — a friendly first look, never a diagnosis."
+        subtitle="Likelihood of common chest findings. A friendly first look, never a diagnosis."
       />
 
       {/* What to do to get better */}
