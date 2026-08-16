@@ -12,7 +12,7 @@ export function buildReportText(result: AnalysisResponse): string {
       (m) => `• ${m.name}: ${m.value} ${m.unit}  [${m.tag}] (healthy ${m.min}–${m.max})`,
     );
     return [
-      "MedLens — Blood Report Summary",
+      "MedLens Blood Report Summary",
       `Generated: ${stamp}`,
       "",
       `Overall: ${bloodResult.summary.headline}`,
@@ -27,10 +27,10 @@ export function buildReportText(result: AnalysisResponse): string {
 
   const xrayResult = result as XRayAnalysisResponse;
   const lines = xrayResult.findings.map(
-    (f) => `• ${f.label}: ${f.probability}% — ${f.note}`,
+    (f) => `• ${f.label}: ${f.probability}% - ${f.note}`,
   );
   return [
-    "MedLens — Chest X-Ray Summary",
+    "MedLens Chest X-Ray Summary",
     `Generated: ${stamp}`,
     "",
     `Overall: ${xrayResult.summary.headline}`,
