@@ -67,16 +67,16 @@ export function DisclaimerModal({ open, onAccept }: { open: boolean; onAccept: (
               <HeartPulse className="size-8" aria-hidden />
             </span>
             <h2 id="disclaimer-title" className="font-display text-[22px] font-bold text-clay-slate">
-              A gentle heads-up first
+              Before we translate
             </h2>
             <p id="disclaimer-desc" className="mt-2 text-[15px] leading-relaxed text-clay-muted">
-              MedLens is an AI educational assistant, <span className="font-semibold text-clay-slate">not a doctor</span>.
-              We help you understand your reports in plain language, but always consult a licensed
+              MedLens is an AI-powered translator, <span className="font-semibold text-clay-slate">not a doctor</span>.
+              We help you understand your reports in your own language, but always consult a licensed
               healthcare professional for decisions about your health.
             </p>
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-[16px] bg-cream px-4 py-2.5 text-[13px] font-semibold text-clay-sage">
-              <ShieldCheck className="size-4" aria-hidden /> Your files are processed privately and never saved.
+              <ShieldCheck className="size-4" aria-hidden /> Your reports are translated privately and never stored.
             </div>
 
             <motion.button
@@ -85,7 +85,7 @@ export function DisclaimerModal({ open, onAccept }: { open: boolean; onAccept: (
               onClick={onAccept}
               className="mt-6 w-full rounded-full bg-clay-terracotta py-3.5 font-display font-semibold text-white clay-btn"
             >
-              I understand, let's go
+              I understand, let's translate
             </motion.button>
           </motion.div>
         </motion.div>

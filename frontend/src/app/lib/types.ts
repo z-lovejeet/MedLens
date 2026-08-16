@@ -71,10 +71,21 @@ export interface WellnessTip {
   body: string;
 }
 
+export interface WellnessModule {
+  badge: string;
+  title: string;
+  subtitle: string;
+  items: { title: string; detail: string }[];
+}
+
 export interface WellnessCategory {
   label: string;
   icon: string; // icon key resolved client-side
   tips: WellnessTip[];
+  recommendedDiet?: string;
+  foodsToEat?: { name: string; why: string }[];
+  foodsToAvoid?: { name: string; why: string }[];
+  modules?: WellnessModule[];
 }
 
 export interface Summary {

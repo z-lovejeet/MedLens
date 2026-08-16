@@ -29,4 +29,4 @@ export const pageVariants: Variants = {
   exit: { opacity: 0, y: -12, transition: { duration: 0.3, ease: EASE } },
 };
 
-export type PageKey = "home" | "report" | "xray" | "history" | "about" | "privacy";
+export type PageKey = "home" | "report" | "xray" | "history" | "about" | "privacy" | "wellness";

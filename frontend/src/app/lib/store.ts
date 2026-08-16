@@ -297,7 +297,7 @@ export const useMedLensStore = create<MedLensStore>()(
           const errorMsg: ChatMessage = {
             role: "assistant",
             content:
-              "I'm having a little trouble right now. Could you try asking again? 💚",
+              "I'm having a little trouble right now. Could you try asking again?",
             timestamp: Date.now(),
           };
 

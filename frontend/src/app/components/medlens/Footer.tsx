@@ -8,27 +8,33 @@ interface FooterProps {
 
 const COLS: { title: string; links: { label: string; page?: PageKey }[] }[] = [
   {
-    title: "Product",
+    title: "Translate",
     links: [
-      { label: "Report Analyzer", page: "report" },
-      { label: "X-Ray Analyzer", page: "xray" },
-      { label: "Wellness Hub", page: "about" },
+      { label: "Blood Report", page: "report" },
+      { label: "Chest X-Ray", page: "xray" },
+      { label: "Wellness Hub", page: "wellness" },
+      { label: "Past Translations", page: "history" },
     ],
   },
   {
-    title: "Company",
+    title: "About",
     links: [
-      { label: "Our story", page: "about" },
+      { label: "Why I built this", page: "about" },
       { label: "Privacy & Ethics", page: "privacy" },
-      { label: "Privacy & Credits", page: "privacy" },
     ],
   },
 ];
 
 export function Footer({ onNavigate }: FooterProps) {
   return (
-    <footer className="relative mt-24 border-t border-black/[0.06] bg-cream/75 backdrop-blur-md px-4 py-12 sm:px-6">
-      <div className="mx-auto max-w-6xl">
+    <footer className="relative mt-24 px-4 pb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6 }}
+        className="mx-auto max-w-6xl overflow-hidden rounded-[32px] clay-lg p-8 sm:p-12"
+      >
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr]">
           {/* Brand */}
           <div>
@@ -39,11 +45,11 @@ export function Footer({ onNavigate }: FooterProps) {
               MedLens
             </div>
             <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-clay-muted">
-              We turn cold, confusing medical reports into warm, human explanations,
-              so you can breathe easier and make calmer decisions about your health.
+              Your medical reports, translated from doctor language into yours.
+              Built so no one has to sit alone with a page they can't read.
             </p>
-            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-[13px] font-semibold text-clay-sage shadow-xs border border-black/5">
-              <ShieldCheck className="size-4" aria-hidden /> Private by design · No data saved
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-[13px] font-semibold text-clay-sage">
+              <ShieldCheck className="size-4" aria-hidden /> Zero data retention · Translated privately
             </div>
           </div>
 
@@ -56,7 +62,7 @@ export function Footer({ onNavigate }: FooterProps) {
                   <li key={l.label}>
                     <button
                       onClick={() => l.page && onNavigate(l.page)}
-                      className="group inline-flex items-center gap-1 text-[15px] text-clay-muted transition-colors hover:text-clay-terracotta cursor-pointer"
+                      className="group inline-flex items-center gap-1 text-[15px] text-clay-muted transition-colors hover:text-clay-terracotta"
                     >
                       {l.label}
                       <ArrowUpRight className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden />
@@ -68,18 +74,17 @@ export function Footer({ onNavigate }: FooterProps) {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-black/[0.06] pt-6">
+        <div className="mt-10 border-t border-clay-slate/10 pt-6">
           <div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
             <p className="text-[13px] text-clay-muted">
-              MedLens is an AI educational assistant, <span className="font-semibold text-clay-slate">not a doctor</span>.
-              Always consult a licensed healthcare professional.
+              MedLens translates health reports into plain language, <span className="font-semibold text-clay-slate">never a clinical diagnosis</span>. Always review results with your doctor.
             </p>
             <p className="inline-flex items-center gap-1.5 text-[13px] text-clay-muted">
-              Made with <Heart className="size-3.5 fill-clay-coral text-clay-coral" aria-label="love" /> for calmer health
+              Built with <Heart className="size-3.5 fill-clay-coral text-clay-coral" aria-label="love" /> by Lovejeet Singh
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }

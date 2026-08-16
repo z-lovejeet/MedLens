@@ -66,17 +66,17 @@ async def chat_agent(
 
     except json.JSONDecodeError:
         return {
-            "reply": "I had a little trouble putting my thoughts together. Could you try asking again? 💚",
+            "reply": "I had a little trouble putting my thoughts together. Could you try asking again?",
             "suggestedFollowUps": [
-                "Can you summarize my results?",
-                "What should I ask my doctor?",
+                "What does this result mean in simple terms?",
+                "Should I follow up with my doctor about this?",
             ],
         }
     except Exception as e:
         return {
-            "reply": f"Something went wrong on my end — please try again in a moment. 💚",
+            "reply": "Something went wrong on my end. Please try again in a moment.",
             "suggestedFollowUps": [
-                "Can you summarize my results?",
-                "What should I ask my doctor?",
+                "Can you summarize my main findings?",
+                "What questions should I ask my doctor?",
             ],
         }

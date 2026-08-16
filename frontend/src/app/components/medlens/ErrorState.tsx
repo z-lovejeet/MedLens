@@ -8,19 +8,19 @@ const CONTENT: Record<
   { title: string; body: string; primary: string; secondary?: string }
 > = {
   timeout: {
-    title: "Our AI is taking longer than usual",
-    body: "This sometimes happens with complex reports. Nothing's broken on your side. Let's give it another gentle try.",
+    title: "The translation is taking longer than usual",
+    body: "Complex reports sometimes need a second read. Nothing is broken on your side. Let's give it another try.",
     primary: "Try again",
     secondary: "Try a different file",
   },
   parsing: {
-    title: "We couldn't read this one clearly",
-    body: "The details came through a little blurry for us. A clearer image or a digital PDF usually does the trick.",
+    title: "We couldn't read this page clearly",
+    body: "The text came through a little blurry for our translator. A clearer image or a digital PDF usually does the trick.",
     primary: "Upload a clearer file",
   },
   server: {
     title: "Something went wrong on our end",
-    body: "We're really sorry about that. It's us, not you. Please give it another try in a moment.",
+    body: "Our translation engine hit a snag. It's us, not your report. Please give it another try in a moment.",
     primary: "Try again",
   },
 };
@@ -82,7 +82,7 @@ export function ErrorState({ type, onRetry, onNewFile }: ErrorStateProps) {
         </div>
 
         <p className="mt-6 inline-flex items-center gap-1.5 text-[13px] text-clay-muted">
-          <LifeBuoy className="size-3.5" aria-hidden /> Still stuck? A clearer, digital PDF works best.
+          <LifeBuoy className="size-3.5" aria-hidden /> Still stuck? A clearer, digital PDF translates best.
         </p>
       </motion.div>
     </section>

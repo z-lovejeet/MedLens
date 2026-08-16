@@ -13,6 +13,8 @@ import {
   FileText,
   Activity,
   Quote,
+  Languages,
+  CheckCircle2,
 } from "lucide-react";
 import { fadeUp, stagger, softScale } from "./anim";
 
@@ -23,17 +25,17 @@ interface LandingProps {
 }
 
 const FEATURES = [
-  { icon: ScanText, title: "Reads any report", body: "Blood work, lipid panels, CBCs or chest X-rays. Drop a PDF or photo and we handle the rest.", tint: "#8a6fb0" },
-  { icon: Sparkles, title: "Plain-English answers", body: "Every term is rewritten at a 6th-grade reading level, warm and free of scary jargon.", tint: "#6bb89a" },
-  { icon: HeartPulse, title: "Gentle guidance", body: "Cozy, personalized lifestyle nudges. Never alarmist, always kind and actionable.", tint: "#e48267" },
-  { icon: Lock, title: "Private by design", body: "Files are processed in your session and never stored. Your health stays yours.", tint: "#eba85c" },
+  { icon: ScanText, title: "Reads any document", body: "Blood work, lipid panels, CBCs, or chest X-rays. Hand us the page your doctor gave you and we'll handle the rest.", tint: "#8a6fb0" },
+  { icon: Sparkles, title: "Translates medical to human", body: "Every clinical term is rewritten at a 6th-grade reading level. Warm, jargon-free, and never scary.", tint: "#6bb89a" },
+  { icon: HeartPulse, title: "Adds what they didn't say", body: "Your doctor had 7 minutes. We fill in what they would have explained if they had 30.", tint: "#e48267" },
+  { icon: Lock, title: "Private by design", body: "Your reports are translated in your session and never stored. Your health data stays yours.", tint: "#eba85c" },
 ];
 
 const STEPS = [
-  { icon: ScanText, title: "Upload", body: "Drop a report or X-ray, or try a sample." },
-  { icon: FlaskConical, title: "We decode", body: "Multi-agent AI standardizes every metric." },
-  { icon: Sparkles, title: "Understand", body: "Read cozy, plain-language explanations." },
-  { icon: Leaf, title: "Act gently", body: "Get tailored wellness steps for your doctor visit." },
+  { icon: ScanText, title: "Hand it over", body: "Drop the report or X-ray your doctor gave you." },
+  { icon: FlaskConical, title: "We read it", body: "Multi-agent AI decodes every clinical term." },
+  { icon: Sparkles, title: "We translate", body: "Medical jargon becomes warm, human sentences." },
+  { icon: Leaf, title: "You understand", body: "Walk into your next appointment informed and calm." },
 ];
 
 const TRUST = [
@@ -58,30 +60,27 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
             variants={fadeUp} initial="hidden" animate="show"
             className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-1.5 text-[13px] font-semibold text-clay-terracotta"
           >
-            <Sparkles className="size-3.5" aria-hidden /> LangGraph Multi-Agent Clinical NLP & Vision
+            <Sparkles className="size-3.5" aria-hidden /> AI-Powered Medical Translator
           </motion.span>
 
           <motion.h1
             variants={fadeUp} custom={1} initial="hidden" animate="show"
             className="mt-5 font-display text-[44px] font-bold leading-[1.06] text-clay-slate sm:text-[62px]"
           >
-            Your medical reports, finally in{" "}
+            Your report, finally in{" "}
             <span className="relative whitespace-nowrap text-clay-terracotta">
-              human language
+              your language
               <svg className="absolute -bottom-2 left-0 w-full" height="12" viewBox="0 0 200 12" fill="none" preserveAspectRatio="none" aria-hidden>
                 <path d="M2 9C40 3 160 3 198 9" stroke="#e48267" strokeWidth="4" strokeLinecap="round" />
               </svg>
             </span>
-            .
           </motion.h1>
 
           <motion.p
             variants={fadeUp} custom={2} initial="hidden" animate="show"
             className="mt-6 max-w-lg text-[18px] leading-relaxed text-clay-muted"
           >
-            No one should sit alone with a page of numbers they can't read. Drop your blood work,
-            lab test, or chest X-ray, MedLens turns it into warm, cozy explanations you can
-            actually understand.
+            90% of patients leave the doctor confused by their own results. MedLens sits between doctor language and yours, turning lab work, blood panels, and chest X-rays into warm, clear explanations you can actually understand.
           </motion.p>
 
           <motion.div variants={fadeUp} custom={3} initial="hidden" animate="show" className="mt-8 flex flex-wrap gap-3">
@@ -90,7 +89,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
               onClick={onEnter}
               className="flex items-center gap-2 rounded-full bg-clay-terracotta px-7 py-4 font-display font-semibold text-white clay-btn"
             >
-              Explain my report <ArrowRight className="size-4" aria-hidden />
+              Translate my report <ArrowRight className="size-4" aria-hidden />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97, y: 2 }}
@@ -113,46 +112,107 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
           </motion.ul>
         </div>
 
-        {/* Floating glass preview */}
-        <motion.div variants={softScale} initial="hidden" animate="show" className="relative mx-auto w-full max-w-sm">
+        {/* Floating Live Translation Preview Card */}
+        <motion.div
+          variants={softScale}
+          initial="hidden"
+          animate="show"
+          className="relative mx-auto w-full max-w-[420px]"
+        >
+          {/* Floating Pill Top Right (No overlapping) */}
           <motion.div
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="rounded-[28px] glass p-6"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-4 -right-2 z-20 flex items-center gap-1.5 rounded-full clay-pill bg-white/95 px-3.5 py-1.5 text-[12px] font-bold text-clay-slate border border-black/5"
           >
-            <div className="flex items-center gap-3">
-              <span className="grid size-11 place-items-center rounded-[16px] bg-clay-sage text-white clay-btn">
-                <Leaf className="size-5" aria-hidden />
-              </span>
-              <div>
-                <p className="font-display font-bold text-clay-slate">Overall summary</p>
-                <p className="text-[13px] text-clay-muted">Mostly great news</p>
-              </div>
-            </div>
-            <div className="mt-5 space-y-3">
-              {[
-                { name: "Hemoglobin", tag: "Optimal", c: "#6bb89a", w: "72%" },
-                { name: "Cholesterol", tag: "Worth asking", c: "#e48267", w: "88%" },
-                { name: "Vitamin D", tag: "Slightly low", c: "#eba85c", w: "40%" },
-              ].map((m) => (
-                <div key={m.name} className="rounded-[18px] bg-white/55 p-3">
-                  <div className="flex items-center justify-between text-[13px]">
-                    <span className="font-semibold text-clay-slate">{m.name}</span>
-                    <span className="font-semibold" style={{ color: m.c }}>{m.tag}</span>
-                  </div>
-                  <div className="mt-2 h-2 rounded-full bg-white/70">
-                    <motion.div initial={{ width: 0 }} animate={{ width: m.w }} transition={{ duration: 1, delay: 0.6 }} className="h-full rounded-full" style={{ background: m.c }} />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <Languages className="size-3.5 text-clay-terracotta" aria-hidden />
+            <span>6th-grade clarity</span>
           </motion.div>
 
-          <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="absolute -left-6 top-6 flex items-center gap-2 rounded-full glass px-3 py-2 text-[12px] font-semibold text-clay-slate">
-            <Activity className="size-4 text-clay-terracotta" aria-hidden /> X-ray ready
+          {/* Floating Pill Bottom Left (No overlapping) */}
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+            className="absolute -bottom-4 -left-2 z-20 flex items-center gap-1.5 rounded-full clay-pill bg-white/95 px-3.5 py-1.5 text-[12px] font-bold text-clay-slate border border-black/5"
+          >
+            <ShieldCheck className="size-3.5 text-clay-sage" aria-hidden />
+            <span>Zero data stored · Private</span>
           </motion.div>
-          <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute -right-4 bottom-10 flex items-center gap-2 rounded-full glass px-3 py-2 text-[12px] font-semibold text-clay-slate">
-            <ShieldCheck className="size-4 text-clay-sage" aria-hidden /> 100% private
+
+          {/* Main Clay Card */}
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
+            className="rounded-[30px] clay-lg bg-white/95 p-5 sm:p-6 backdrop-blur-md border border-white/80"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-black/[0.06] pb-3.5">
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-[14px] bg-clay-terracotta text-white clay-btn">
+                  <Sparkles className="size-5" aria-hidden />
+                </span>
+                <div>
+                  <p className="font-display text-[16px] font-bold text-clay-slate leading-tight">
+                    Live Translation
+                  </p>
+                  <p className="text-[12.5px] font-medium text-clay-muted">
+                    Doctor Language <span className="text-clay-terracotta font-semibold">➔</span> Yours
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-clay-sage/15 px-2.5 py-1 text-[11.5px] font-bold text-clay-sage">
+                <span className="size-1.5 rounded-full bg-clay-sage animate-pulse" />
+                Active
+              </span>
+            </div>
+
+            {/* Translation Demo Items */}
+            <div className="mt-4 space-y-3">
+              {/* Item 1: Blood Marker */}
+              <div className="rounded-[20px] bg-clay-cream/60 p-3.5 border border-black/[0.04] transition-all hover:bg-clay-cream/90">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[11.5px] font-semibold text-clay-muted bg-white/80 px-2 py-0.5 rounded-md">
+                    HbA1c · 5.4%
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11.5px] font-bold text-clay-sage">
+                    <CheckCircle2 className="size-3" /> Optimal
+                  </span>
+                </div>
+                <p className="mt-2 text-[13.5px] font-medium text-clay-slate leading-snug">
+                  "Your 3-month blood sugar is steady, healthy, and right where it should be."
+                </p>
+              </div>
+
+              {/* Item 2: Jargon Decoded */}
+              <div className="rounded-[20px] bg-clay-cream/60 p-3.5 border border-black/[0.04] transition-all hover:bg-clay-cream/90">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[11.5px] font-semibold text-clay-muted bg-white/80 px-2 py-0.5 rounded-md">
+                    LDL · 138 mg/dL
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11.5px] font-bold text-clay-amber">
+                    <HeartPulse className="size-3" /> Worth asking
+                  </span>
+                </div>
+                <p className="mt-2 text-[13.5px] font-medium text-clay-slate leading-snug">
+                  "Slightly above ideal. A small swap in cooking oils and brisk walks will help."
+                </p>
+              </div>
+
+              {/* Item 3: Chest X-Ray Translation */}
+              <div className="rounded-[20px] bg-clay-cream/60 p-3.5 border border-black/[0.04] transition-all hover:bg-clay-cream/90">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[11.5px] font-semibold text-clay-muted bg-white/80 px-2 py-0.5 rounded-md">
+                    Chest X-Ray · PA View
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11.5px] font-bold text-clay-sage">
+                    <Activity className="size-3" /> Clear scan
+                  </span>
+                </div>
+                <p className="mt-2 text-[13.5px] font-medium text-clay-slate leading-snug">
+                  "Both lung fields are completely clear with healthy airflow throughout."
+                </p>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
       </section>
@@ -165,18 +225,17 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
         >
           <Quote className="mx-auto mb-4 size-8 text-clay-terracotta/40" aria-hidden />
           <p className="mx-auto max-w-2xl font-display text-[24px] font-semibold leading-relaxed text-clay-slate sm:text-[28px]">
-            “Not understanding is its own kind of fear. We built MedLens so no one has to sit
-            alone with a page they can't read.”
+            "Not understanding your own body is its own kind of fear. I built MedLens because everyone deserves a translator for the scariest page they'll ever read."
           </p>
           <button onClick={onAbout} className="mt-5 inline-flex items-center gap-1.5 font-semibold text-clay-terracotta hover:underline">
-            Read our story <ArrowRight className="size-4" aria-hidden />
+            Why I built this translator <ArrowRight className="size-4" aria-hidden />
           </button>
         </motion.blockquote>
       </section>
 
       {/* Features */}
       <section aria-labelledby="feat-heading" className="relative z-10 mx-auto max-w-6xl px-4 py-12">
-        <SectionHeading id="feat-heading" kicker="Why MedLens" title="Health data that finally feels friendly" />
+        <SectionHeading id="feat-heading" kicker="Why MedLens" title="A translator for the language your body speaks" />
         <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f) => {
             const Icon = f.icon;
@@ -195,7 +254,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
 
       {/* How it works */}
       <section aria-labelledby="how-heading" className="relative z-10 mx-auto max-w-6xl px-4 py-12">
-        <SectionHeading id="how-heading" kicker="How it works" title="Four cozy steps to clarity" />
+        <SectionHeading id="how-heading" kicker="How it works" title="Four steps from confusion to clarity" />
         <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s, i) => {
             const Icon = s.icon;
@@ -222,7 +281,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
           viewport={{ once: true }}
           className="mb-8 text-center font-display text-2xl font-bold text-clay-slate"
         >
-          Loved by early access users
+          What early users are saying
         </motion.h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {/* Review 1 */}
@@ -233,8 +292,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
               ))}
             </div>
             <blockquote className="text-[15px] leading-relaxed text-clay-slate">
-              "For the first time I understood my blood work without spiraling into panic. It felt
-              like a kind friend sitting beside me."
+              "For the first time I understood my blood work without spiraling into panic. It felt like a kind friend translating everything for me."
             </blockquote>
             <figcaption className="mt-4 text-[13px] font-semibold text-clay-muted">Priya · early access user</figcaption>
           </motion.figure>
@@ -247,9 +305,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
               ))}
             </div>
             <blockquote className="text-[15px] leading-relaxed text-clay-slate">
-              "My son showed me this after my routine checkup. I finally understood why the
-              doctor said my vitamin D was low and what I could actually do about it. So
-              simple even I could use it!"
+              "My son showed me this after my routine checkup. The translation was so clear I finally understood why my vitamin D was low and what I could actually do about it."
             </blockquote>
             <figcaption className="mt-4 text-[13px] font-semibold text-clay-muted">Sunita S. · early access user</figcaption>
           </motion.figure>
@@ -262,9 +318,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
               ))}
             </div>
             <blockquote className="text-[15px] leading-relaxed text-clay-slate">
-              "I used to just file my reports away and forget about them. Now I actually
-              read the explanations and the lifestyle tips are genuinely helpful. Shared it
-              with my whole office."
+              "I used to just file my reports away because I couldn't read them. Now MedLens translates everything and the wellness tips are genuinely helpful. Shared it with my whole office."
             </blockquote>
             <figcaption className="mt-4 text-[13px] font-semibold text-clay-muted">Rajesh S. · early access user</figcaption>
           </motion.figure>
@@ -277,10 +331,10 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
           <span className="mx-auto mb-5 grid size-16 place-items-center rounded-[22px] bg-clay-terracotta text-white clay-btn clay-pulse">
             <HeartPulse className="size-8" aria-hidden />
           </span>
-          <h2 className="font-display text-[32px] font-bold text-clay-slate sm:text-[40px]">Ready to understand your health?</h2>
-          <p className="mx-auto mt-3 max-w-md text-[16px] text-clay-muted">No sign-up, no stored data. Just calmer, clearer answers in seconds.</p>
+          <h2 className="font-display text-[32px] font-bold text-clay-slate sm:text-[40px]">Your reports deserve a translator.</h2>
+          <p className="mx-auto mt-3 max-w-md text-[16px] text-clay-muted">No sign-up, no stored data. Just your doctor's words, finally in yours.</p>
           <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97, y: 2 }} onClick={onEnter} className="mx-auto mt-7 flex items-center gap-2 rounded-full bg-clay-terracotta px-8 py-4 font-display font-semibold text-white clay-btn">
-            Launch MedLens <ArrowRight className="size-4" aria-hidden />
+            Start translating <ArrowRight className="size-4" aria-hidden />
           </motion.button>
         </motion.div>
       </section>

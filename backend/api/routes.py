@@ -165,7 +165,7 @@ async def analyze_report(
             status_code=500,
             content=ErrorResponse(
                 error="internal_error",
-                message="Something unexpected happened. Try again — we're working on it 💚",
+                message="Something unexpected happened. Please try again.",
                 detail=str(e),
             ).model_dump(),
         )
@@ -209,7 +209,7 @@ async def analyze_report(
             status_code=500,
             content=ErrorResponse(
                 error="response_validation",
-                message="We got results but had trouble formatting them. Please try again 💚",
+                message="We got results but had trouble formatting them. Please try again.",
                 detail=str(e),
             ).model_dump(),
         )
@@ -249,7 +249,7 @@ async def chat_with_results(request: ChatRequest):
             status_code=504,
             content=ErrorResponse(
                 error="timeout",
-                message="Chat is taking a moment — try a shorter question? 🌀",
+                message="Chat is taking a moment — try a shorter question?",
                 detail=f"Chat exceeded {settings.CHAT_TIMEOUT} second timeout",
             ).model_dump(),
         )
@@ -258,7 +258,7 @@ async def chat_with_results(request: ChatRequest):
             status_code=500,
             content=ErrorResponse(
                 error="chat_error",
-                message="Our chat helper had a hiccup. Please try again 💚",
+                message="Our chat helper had a hiccup. Please try again.",
                 detail=str(e),
             ).model_dump(),
         )

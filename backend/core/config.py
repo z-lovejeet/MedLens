@@ -17,7 +17,7 @@ class Settings:
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
 
     # Model Names
-    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.7-flash")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
     GROQ_MODEL: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
     # CORS
@@ -31,8 +31,8 @@ class Settings:
 
     # Limits
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB
-    ANALYSIS_TIMEOUT: int = 60             # seconds
-    CHAT_TIMEOUT: int = 20                 # seconds
+    ANALYSIS_TIMEOUT: int = 90             # seconds
+    CHAT_TIMEOUT: int = 25                 # seconds
     RATE_LIMIT_ANALYZE: int = 10           # per minute per IP
     RATE_LIMIT_CHAT: int = 30              # per minute per IP
 

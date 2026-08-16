@@ -7,8 +7,8 @@ import { fadeUp, stagger } from "./anim";
 
 export function ConditionsSection({
   conditions,
-  title = "Condition screening",
-  subtitle = "A gentle, plain-language look at what your results suggest. This is never a diagnosis.",
+  title = "What we checked for you",
+  subtitle = "Likelihood of common conditions, translated honestly from your results. Always confirm with your doctor.",
 }: {
   conditions: Condition[];
   title?: string;
@@ -36,7 +36,7 @@ export function ConditionsSection({
         variants={stagger}
         initial="hidden"
         animate="show"
-        className="grid gap-4 sm:grid-cols-2"
+        className="flex flex-col gap-3.5"
       >
         {conditions.map((c) => {
           const meta = STATUS_META[c.status] ?? STATUS_META.optimal;
@@ -45,21 +45,21 @@ export function ConditionsSection({
             <motion.article
               key={c.name}
               variants={fadeUp}
-              whileHover={{ y: -3 }}
+              whileHover={{ y: -2 }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
               className="clay-hover rounded-[22px] clay bg-white p-5"
             >
               <div className="flex items-center justify-between gap-3">
-                <h3 className="flex items-center gap-2 font-display font-bold text-clay-slate">
+                <h3 className="flex items-center gap-2.5 font-display text-[16px] font-bold text-clay-slate">
                   <Icon
-                    className="size-4"
+                    className="size-4.5"
                     style={{ color: meta.color }}
                     aria-hidden
                   />
                   {c.name}
                 </h3>
                 <span
-                  className="rounded-full px-2.5 py-1 font-display text-[13px] font-bold"
+                  className="rounded-full px-3 py-1 font-display text-[13px] font-bold"
                   style={{ background: meta.soft, color: meta.color }}
                 >
                   {c.chance}%
@@ -67,7 +67,7 @@ export function ConditionsSection({
               </div>
 
               <div
-                className="mt-3 h-3 overflow-hidden rounded-full clay-inset bg-cream"
+                className="mt-3 h-2.5 overflow-hidden rounded-full clay-inset bg-cream"
                 role="meter"
                 aria-valuenow={c.chance}
                 aria-valuemin={0}
@@ -88,7 +88,7 @@ export function ConditionsSection({
               >
                 {meta.label} likelihood
               </p>
-              <p className="mt-2 text-[14px] leading-relaxed text-clay-muted">
+              <p className="mt-2 text-[14.5px] leading-relaxed text-clay-muted">
                 {c.blurb}
               </p>
             </motion.article>

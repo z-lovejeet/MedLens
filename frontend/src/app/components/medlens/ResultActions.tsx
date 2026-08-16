@@ -10,8 +10,8 @@ export function ResultActions({ onReset }: { onReset: () => void }) {
   const handleDownload = () => {
     if (!result) return;
     downloadReport(result);
-    toast.success("Summary downloaded", {
-      description: "Saved as a text file you can bring to your doctor.",
+    toast.success("PDF summary downloaded", {
+      description: "Saved as a PDF ready to print or share with your doctor.",
     });
   };
 
@@ -26,7 +26,7 @@ export function ResultActions({ onReset }: { onReset: () => void }) {
       }
     } catch {
       toast.error("Couldn't share just now", {
-        description: "Please try again, or download the summary instead.",
+        description: "Please try again, or download the PDF instead.",
       });
     }
   };
@@ -39,7 +39,7 @@ export function ResultActions({ onReset }: { onReset: () => void }) {
         onClick={handleDownload}
         className="inline-flex items-center gap-2 rounded-full bg-clay-terracotta px-5 py-3 font-display font-semibold text-white clay-btn"
       >
-        <Download className="size-4" aria-hidden /> Download summary
+        <Download className="size-4" aria-hidden /> Download PDF summary
       </motion.button>
       <motion.button
         whileHover={{ scale: 1.03, y: -2 }}

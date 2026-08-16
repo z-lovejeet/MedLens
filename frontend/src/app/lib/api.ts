@@ -80,7 +80,7 @@ export async function sendChatMessage(
   if (!res.ok) {
     const err = await res.json().catch(() => ({
       error: "chat_error",
-      message: "I'm having a little trouble right now. Try again in a moment 💚",
+      message: "I'm having a little trouble right now. Please try again in a moment.",
     }));
     throw new ApiError(
       err.error || "server_error",

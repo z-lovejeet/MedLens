@@ -8,9 +8,19 @@ from core.models import model_router, parse_json_from_llm
 from core.prompts import XRAY_PROMPT
 
 
-def classify_finding(probability: int) -> str:
-    """Classify X-ray finding status from probability."""
-    if probability <= 20:
+def classify_finding(label: str, probability: int) -> str:
+    """Classify X-ray finding status from label and probability."""
+    label_lower = label.lower()
+    # Positive / healthy markers (e.g. Clear Lungs, Healthy Aeration)
+    if any(k in label_lower for k in ["clear", "normal", "healthy", "aerat"]):
+        if probability >= 60:
+            return "optimal"
+        elif probability >= 35:
+            return "borderline"
+        return "attention"
+
+    # Pathology markers (e.g. Infiltration, Cardiomegaly, Effusion, Nodule)
+    if probability <= 25:
         return "optimal"
     elif probability <= 50:
         return "borderline"
@@ -72,7 +82,7 @@ async def xray_agent(state: MedLensState) -> dict:
             findings.append({
                 "label": f["label"],
                 "probability": prob,
-                "status": classify_finding(prob),
+                "status": classify_finding(f["label"], prob),
                 "note": "",  # filled by explainer_agent
             })
 

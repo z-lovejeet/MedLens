@@ -48,14 +48,14 @@ export function ReportResults({ onReset }: { onReset: () => void }) {
       <div className="flex items-center justify-between">
         <button
           onClick={onReset}
-          className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-[14px] font-semibold text-clay-slate shadow-sm transition-colors hover:bg-clay-cream"
+          className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[14px] font-semibold clay-btn-light cursor-pointer"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Back
         </button>
         <button
           onClick={onReset}
-          className="inline-flex items-center gap-2 rounded-full bg-clay-terracotta px-5 py-2.5 text-[14px] font-bold text-white shadow-sm transition-colors hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-full bg-clay-terracotta px-5 py-2 text-[14px] font-bold text-white clay-btn cursor-pointer"
         >
           <RotateCcw className="size-4" aria-hidden />
           Analyze Another Report
@@ -82,7 +82,7 @@ export function ReportResults({ onReset }: { onReset: () => void }) {
               </span>
               <div>
                 <div className="mb-1 inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-[13px] font-semibold text-clay-sage">
-                  <Sparkles className="size-3.5" aria-hidden /> Overall Health Summary
+                  <Sparkles className="size-3.5" aria-hidden /> Your Report, Translated
                 </div>
                 <h1
                   id="summary-heading"
@@ -131,11 +131,11 @@ export function ReportResults({ onReset }: { onReset: () => void }) {
             id="breakdown-heading"
             className="font-display text-[18px] font-bold text-clay-slate"
           >
-            Your markers, decoded
+            Your markers, translated
           </h2>
           <p className="text-[14px] text-clay-muted">
-            Every value from your report — with a plain-English translation and
-            where it sits in the healthy range.
+            Every value from your report, decoded from medical shorthand into
+            plain language you can act on.
           </p>
         </div>
         <motion.div
@@ -163,11 +163,11 @@ export function ReportResults({ onReset }: { onReset: () => void }) {
             id="whattodo-heading"
             className="font-display text-[18px] font-bold text-clay-slate"
           >
-            What to do to feel better
+            What your body is quietly asking for
           </h2>
         </div>
         <p className="mb-4 text-[14px] text-clay-muted">
-          Small, cozy steps that gently nudge your numbers in a happier direction.
+          Personalized guidance translated from your results. What your doctor would suggest if they had more time.
         </p>
         <Recommendations items={recommendations} bare />
       </section>
@@ -178,10 +178,10 @@ export function ReportResults({ onReset }: { onReset: () => void }) {
       {/* Actions */}
       <div className="mt-10 rounded-[24px] clay bg-white p-6">
         <h2 className="font-display text-[17px] font-bold text-clay-slate">
-          Take it with you
+          Take your translation with you
         </h2>
         <p className="mt-1 mb-4 text-[15px] text-clay-muted">
-          Save a plain-language summary or share it with someone you trust.
+          Download your translated summary or share it with your care team.
         </p>
         <ResultActions onReset={onReset} />
       </div>

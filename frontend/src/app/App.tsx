@@ -8,6 +8,7 @@ import { AnalyzerFlow } from "./components/medlens/AnalyzerFlow";
 import { AboutPage } from "./components/medlens/AboutPage";
 import { PrivacyPage } from "./components/medlens/PrivacyPage";
 import { HistoryPage } from "./components/medlens/HistoryPage";
+import { WellnessHubPage } from "./components/medlens/WellnessHubPage";
 import { DisclaimerModal } from "./components/medlens/Disclaimer";
 import { pageVariants, type PageKey } from "./components/medlens/anim";
 
@@ -83,6 +84,8 @@ export default function App() {
               {page === "about" && <AboutPage onCta={() => navigate("report")} />}
 
               {page === "privacy" && <PrivacyPage />}
+
+              {page === "wellness" && <WellnessHubPage onAnalyze={() => navigate("report")} />}
             </motion.div>
           </AnimatePresence>
         </main>

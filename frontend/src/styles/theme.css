@@ -147,6 +147,15 @@
 
   --font-display: 'Quicksand', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+
+  /* Global clay-tinted downward shadow tokens */
+  --shadow-2xs: 0 2px 5px -1px rgba(50, 44, 74, 0.06), 0 1px 2px 0 rgba(50, 44, 74, 0.03);
+  --shadow-xs: 0 4px 10px -2px rgba(50, 44, 74, 0.08), 0 1.5px 3px -1px rgba(50, 44, 74, 0.04);
+  --shadow-sm: 0 6px 16px -3px rgba(50, 44, 74, 0.09), 0 2px 5px -1px rgba(50, 44, 74, 0.04);
+  --shadow-md: 0 12px 26px -5px rgba(50, 44, 74, 0.12), 0 4px 10px -2px rgba(50, 44, 74, 0.05);
+  --shadow-lg: 0 20px 42px -8px rgba(50, 44, 74, 0.14), 0 6px 16px -3px rgba(50, 44, 74, 0.06);
+  --shadow-xl: 0 28px 56px -12px rgba(50, 44, 74, 0.16), 0 8px 20px -4px rgba(50, 44, 74, 0.07);
+  --shadow-2xl: 0 36px 72px -16px rgba(50, 44, 74, 0.18), 0 12px 28px -6px rgba(50, 44, 74, 0.08);
 }
 
 @layer base {
@@ -163,44 +172,100 @@
 @layer utilities {
   .font-display { font-family: 'Quicksand', ui-sans-serif, system-ui, sans-serif; }
 
-  /* Soft raised clay card — deeper, puffier claymorphism */
+  /* Soft raised clay card — clean, cozy, aesthetic downward depth */
   .clay {
     background: var(--clay-white);
     border-radius: 24px;
     box-shadow:
-      0 18px 40px -10px rgba(50, 44, 74, 0.16),
-      0 6px 16px -6px rgba(50, 44, 74, 0.10),
-      inset 0 3px 6px 0 rgba(255, 255, 255, 0.95),
-      inset 0 -4px 8px 0 rgba(50, 44, 74, 0.09);
+      0 14px 30px -6px rgba(50, 44, 74, 0.11),
+      0 4px 10px -2px rgba(50, 44, 74, 0.05),
+      inset 0 2.5px 4.5px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -3px 6px 0 rgba(50, 44, 74, 0.05);
+  }
+  .clay-sm {
+    background: var(--clay-white);
+    border-radius: 16px;
+    box-shadow:
+      0 6px 16px -3px rgba(50, 44, 74, 0.09),
+      0 2px 5px -1px rgba(50, 44, 74, 0.04),
+      inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -2px 4px 0 rgba(50, 44, 74, 0.04);
+  }
+  .clay-pill {
+    background: var(--clay-white);
+    border-radius: 9999px;
+    box-shadow:
+      0 4px 12px -2px rgba(50, 44, 74, 0.08),
+      0 1.5px 4px -1px rgba(50, 44, 74, 0.04),
+      inset 0 1.5px 2.5px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1.5px 3px 0 rgba(50, 44, 74, 0.03);
   }
   .clay-cream {
     background: var(--cream);
     border-radius: 24px;
     box-shadow:
-      0 18px 40px -10px rgba(50, 44, 74, 0.16),
-      inset 0 3px 6px 0 rgba(255, 255, 255, 0.9),
-      inset 0 -4px 8px 0 rgba(50, 44, 74, 0.09);
+      0 12px 26px -6px rgba(50, 44, 74, 0.10),
+      0 3px 8px -2px rgba(50, 44, 74, 0.04),
+      inset 0 2.5px 5px 0 rgba(255, 255, 255, 0.92),
+      inset 0 -3px 5px 0 rgba(50, 44, 74, 0.05);
   }
-  /* Sunken / pressed-in clay (dropzone, tracks) — deeper well */
+  /* Sunken / pressed-in clay (dropzone, tracks) — soft depth */
   .clay-inset {
     box-shadow:
-      inset 0 6px 14px 0 rgba(50, 44, 74, 0.14),
-      inset 0 -3px 6px 0 rgba(255, 255, 255, 0.85);
+      inset 0 4px 10px 0 rgba(50, 44, 74, 0.10),
+      inset 0 1px 3px 0 rgba(50, 44, 74, 0.06),
+      inset 0 -2px 4px 0 rgba(255, 255, 255, 0.85);
   }
-  /* Interactive clay button — puffier press physics */
+  /* Interactive clay button — tactile down shadow */
   .clay-btn {
     box-shadow:
-      0 12px 24px -6px rgba(138, 111, 176, 0.5),
-      inset 0 3px 4px 0 rgba(255, 255, 255, 0.45),
-      inset 0 -4px 7px 0 rgba(58, 51, 82, 0.16);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
+      0 10px 22px -5px rgba(138, 111, 176, 0.44),
+      0 3px 6px -1px rgba(50, 44, 74, 0.08),
+      inset 0 2px 3.5px 0 rgba(255, 255, 255, 0.48),
+      inset 0 -3px 5px 0 rgba(58, 51, 82, 0.18);
+    transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.18s ease;
+  }
+  .clay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 14px 28px -5px rgba(138, 111, 176, 0.50),
+      0 5px 10px -2px rgba(50, 44, 74, 0.10),
+      inset 0 2.5px 4px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -3px 5px 0 rgba(58, 51, 82, 0.18);
   }
   .clay-btn:active {
-    transform: translateY(3px);
+    transform: translateY(2px);
     box-shadow:
-      0 4px 10px -4px rgba(138, 111, 176, 0.4),
-      inset 0 3px 4px 0 rgba(255, 255, 255, 0.4),
-      inset 0 -2px 4px 0 rgba(58, 51, 82, 0.14);
+      0 4px 10px -3px rgba(138, 111, 176, 0.35),
+      inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1.5px 3px 0 rgba(58, 51, 82, 0.14);
+  }
+
+  /* Light / secondary clay button */
+  .clay-btn-light {
+    background: var(--clay-white);
+    color: var(--clay-slate);
+    box-shadow:
+      0 6px 16px -3px rgba(50, 44, 74, 0.09),
+      0 2px 5px -1px rgba(50, 44, 74, 0.04),
+      inset 0 2px 4px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -2px 4px 0 rgba(50, 44, 74, 0.04);
+    transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.18s ease;
+  }
+  .clay-btn-light:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 22px -3px rgba(50, 44, 74, 0.13),
+      0 3px 7px -1px rgba(50, 44, 74, 0.06),
+      inset 0 2px 4px 0 rgba(255, 255, 255, 0.98),
+      inset 0 -2px 4px 0 rgba(50, 44, 74, 0.04);
+  }
+  .clay-btn-light:active {
+    transform: translateY(2px);
+    box-shadow:
+      0 2px 6px -1px rgba(50, 44, 74, 0.08),
+      inset 0 1px 2px 0 rgba(255, 255, 255, 0.8),
+      inset 0 -1px 2px 0 rgba(50, 44, 74, 0.03);
   }
 
   /* ===== Glassmorphism (landing page) ===== */
@@ -210,15 +275,19 @@
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     border: 1px solid var(--glass-border);
     box-shadow:
-      0 16px 40px -12px rgba(58, 51, 82, 0.22),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);
+      0 16px 36px -10px rgba(50, 44, 74, 0.14),
+      0 4px 10px -2px rgba(50, 44, 74, 0.06),
+      inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.85);
   }
   .glass-soft {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(14px) saturate(150%);
     -webkit-backdrop-filter: blur(14px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 24px -10px rgba(58, 51, 82, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 8px 20px -6px rgba(50, 44, 74, 0.10),
+      0 2px 6px -1px rgba(50, 44, 74, 0.04),
+      inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.9);
   }
   .aurora-blob {
     position: absolute;
@@ -246,12 +315,21 @@
     background: var(--clay-white);
     border-radius: 30px;
     box-shadow:
-      0 34px 70px -20px rgba(50, 44, 74, 0.26),
-      0 12px 26px -10px rgba(50, 44, 74, 0.14),
-      inset 0 3px 7px 0 rgba(255, 255, 255, 0.97),
-      inset 0 -5px 9px 0 rgba(50, 44, 74, 0.09);
+      0 24px 52px -12px rgba(50, 44, 74, 0.15),
+      0 8px 20px -4px rgba(50, 44, 74, 0.07),
+      inset 0 3px 6px 0 rgba(255, 255, 255, 0.98),
+      inset 0 -4px 8px 0 rgba(50, 44, 74, 0.05);
   }
-  .clay-hover { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease; }
+  .clay-hover {
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .clay-hover:hover {
+    box-shadow:
+      0 20px 42px -8px rgba(50, 44, 74, 0.15),
+      0 6px 14px -3px rgba(50, 44, 74, 0.07),
+      inset 0 2.5px 5px 0 rgba(255, 255, 255, 0.98),
+      inset 0 -3px 6px 0 rgba(50, 44, 74, 0.05);
+  }
   .clay-pulse { animation: softpulse 2.4s ease-in-out infinite; }
 
   /* Warm rust accent surfaces (errors) */
@@ -260,6 +338,11 @@
     box-shadow:
       0 10px 30px -8px rgba(178, 90, 56, 0.18),
       inset 0 2px 4px 0 rgba(255,255,255,0.7);
+  }
+
+  /* Floating bubble tail down-shadow */
+  .clay-tail {
+    box-shadow: 3px 3px 6px -1px rgba(50, 44, 74, 0.08);
   }
 
   /* Consistent, always-visible keyboard focus */

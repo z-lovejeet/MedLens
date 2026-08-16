@@ -6,6 +6,8 @@ import {
   Stethoscope,
   ScanLine,
   ShieldCheck,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Kind } from "../../lib/types";
@@ -28,29 +30,26 @@ const COPY: Record<
     dropTitle: string;
     dropSub: string;
     icon: typeof Stethoscope;
-    sampleTitle: string;
-    sampleSub: string;
+    sampleLabel: string;
   }
 > = {
   blood: {
-    step: "Report Analyzer · Step 1",
-    heading: "Let's make sense of your report, together.",
-    sub: "Drop your blood work or lab test below. We'll gently translate every confusing term into warm, plain language.",
-    dropTitle: "Drop your blood report here, or tap to browse",
+    step: "Report Translator",
+    heading: "What did your doctor hand you?",
+    sub: "Drop your blood work or lab test below. We'll translate every confusing term into warm, plain language your doctor would use if they had 30 minutes instead of 3.",
+    dropTitle: "Drop your report here and we'll start translating",
     dropSub: "CBC, Lipid panels, metabolic panels. PDF, PNG or JPG (max 10MB)",
     icon: Stethoscope,
-    sampleTitle: "Try a sample Blood Report",
-    sampleSub: "CBC + Lipid panel",
+    sampleLabel: "sample blood report (CBC + Lipid)",
   },
   xray: {
-    step: "X-Ray Analyzer · Step 1",
-    heading: "Let's take a calm look at your scan, together.",
-    sub: "Drop your chest X-ray below. Our vision model highlights each region and explains it in warm, plain language.",
-    dropTitle: "Drop your chest X-ray here, or tap to browse",
+    step: "X-Ray Translator",
+    heading: "Let's read your scan together.",
+    sub: "Drop your chest X-ray below. Our vision model translates each region into warm, plain language and highlights what matters.",
+    dropTitle: "Drop your chest X-ray here and we'll start translating",
     dropSub: "Chest X-rays, PA or AP views. PNG or JPG (max 10MB)",
     icon: ScanLine,
-    sampleTitle: "Try a sample Chest X-Ray",
-    sampleSub: "PA view scan",
+    sampleLabel: "sample chest X-Ray scan",
   },
 };
 
@@ -60,35 +59,28 @@ export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
   const c = COPY[kind];
   const DropIcon = c.icon;
 
-  const validateAndGo = (file: File) => {
-    const ACCEPTED = kind === "xray"
-      ? ["image/png", "image/jpeg", "image/webp"]
-      : ["application/pdf", "image/png", "image/jpeg"];
-    const nameOk = kind === "xray"
-      ? /\.(png|jpe?g|webp)$/i.test(file.name)
-      : /\.(pdf|png|jpe?g)$/i.test(file.name);
-
-    if (!ACCEPTED.includes(file.type) && !nameOk) {
-      const description = kind === "xray" 
-        ? "Please upload a PNG, JPG, or WebP image"
-        : "Please upload a PDF, PNG, or JPG file";
-      toast.error("This file type isn't supported", {
-        description,
+  const handleFiles = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+    if (file.size > MAX_BYTES) {
+      toast.error("File is too large", {
+        description: "Please upload a report under 10MB.",
       });
       return;
     }
-    if (file.size > MAX_BYTES) {
-      toast.error("This file is a little too large", {
-        description: "Max 10MB. Try compressing it and upload again.",
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    const validExts =
+      kind === "xray" ? ["png", "jpg", "jpeg"] : ["pdf", "png", "jpg", "jpeg"];
+    if (!ext || !validExts.includes(ext)) {
+      toast.error("Unsupported file format", {
+        description:
+          kind === "xray"
+            ? "Chest X-rays must be PNG or JPG images."
+            : "Reports must be PDF, PNG, or JPG.",
       });
       return;
     }
     onAnalyze(file);
-  };
-
-  const handleFiles = (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    validateAndGo(files[0]);
   };
 
   return (
@@ -140,7 +132,7 @@ export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="w-full rounded-[26px] clay-cream clay-inset border-[3px] border-dashed border-clay-terracotta/60 px-6 py-14 text-center"
+          className="w-full rounded-[26px] clay-cream clay-inset border-[3px] border-dashed border-clay-terracotta/60 px-6 py-14 text-center cursor-pointer transition-transform active:scale-[0.99]"
         >
           <motion.div
             animate={{ y: [0, -10, 0] }}
@@ -164,57 +156,30 @@ export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
           onChange={(e) => handleFiles(e.target.files)}
         />
 
-        <p className="mt-4 flex items-center justify-center gap-2 text-[13px] font-semibold text-clay-sage">
-          <ShieldCheck className="size-4" aria-hidden /> Processed privately in
-          your browser. Results saved locally for your convenience.
-        </p>
-
-        <div className="mt-4">
-          <SampleButton
-            icon={
-              kind === "xray" ? (
-                <Activity className="size-5" aria-hidden />
+        {/* Clean Sample Trigger & Privacy Notice */}
+        <div className="mt-6 flex flex-col items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-[13.5px]">
+            <span className="text-clay-muted">No file on hand?</span>
+            <button
+              type="button"
+              onClick={onSample}
+              className="group inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 font-bold text-clay-terracotta border border-clay-terracotta/25 shadow-xs transition-all duration-150 ease-out hover:bg-clay-terracotta hover:text-white hover:shadow-sm hover:border-transparent active:scale-95 cursor-pointer"
+            >
+              {kind === "xray" ? (
+                <Activity className="size-3.5" aria-hidden />
               ) : (
-                <FileText className="size-5" aria-hidden />
-              )
-            }
-            title={c.sampleTitle}
-            subtitle={c.sampleSub}
-            onClick={onSample}
-          />
+                <FileText className="size-3.5" aria-hidden />
+              )}
+              <span>Load sample {kind === "xray" ? "chest X-Ray" : "blood panel"}</span>
+              <ArrowRight className="size-3 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden />
+            </button>
+          </div>
+
+          <p className="flex items-center justify-center gap-1.5 text-[12.5px] font-medium text-clay-muted">
+            <ShieldCheck className="size-3.5 text-clay-sage" aria-hidden /> Translated privately in your session · Zero data stored
+          </p>
         </div>
       </motion.div>
     </section>
-  );
-}
-
-function SampleButton({
-  icon,
-  title,
-  subtitle,
-  onClick,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  onClick: () => void;
-}) {
-  return (
-    <motion.button
-      whileHover={{ scale: 1.02, y: -2 }}
-      whileTap={{ scale: 0.98, y: 2 }}
-      onClick={onClick}
-      className="flex w-full items-center gap-3 rounded-[20px] clay bg-white px-4 py-4 text-left"
-    >
-      <span className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-clay-sage/20 text-clay-sage">
-        {icon}
-      </span>
-      <span>
-        <span className="block font-display font-semibold text-clay-slate">
-          {title}
-        </span>
-        <span className="block text-[13px] text-clay-muted">{subtitle}</span>
-      </span>
-    </motion.button>
   );
 }

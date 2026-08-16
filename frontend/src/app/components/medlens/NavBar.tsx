@@ -5,11 +5,12 @@ import type { PageKey } from "./anim";
 
 const LINKS: { key: PageKey; label: string }[] = [
   { key: "home", label: "Home" },
-  { key: "report", label: "Report Analyzer" },
-  { key: "xray", label: "X-Ray Analyzer" },
+  { key: "report", label: "Reports" },
+  { key: "xray", label: "X-Ray" },
+  { key: "wellness", label: "Wellness" },
   { key: "history", label: "History" },
   { key: "about", label: "About" },
-  { key: "privacy", label: "Privacy & Ethics" },
+  { key: "privacy", label: "Privacy" },
 ];
 
 interface NavBarProps {
@@ -52,7 +53,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
           MedLens
         </button>
 
-        <ul className="mx-auto hidden items-center gap-1.5 lg:flex">
+        <ul className="mx-auto hidden items-center gap-1 lg:flex">
           {LINKS.map((l) => {
             const active = page === l.key;
             return (
@@ -60,7 +61,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
                 <button
                   onClick={() => onNavigate(l.key)}
                   aria-current={active ? "page" : undefined}
-                  className={`relative rounded-full px-4 py-2 text-[15px] transition-colors cursor-pointer ${
+                  className={`relative rounded-full px-3 py-2 text-[14px] whitespace-nowrap transition-colors cursor-pointer ${
                     active
                       ? "text-clay-slate font-bold"
                       : "text-clay-muted hover:text-clay-slate hover:bg-white/50 font-medium"
@@ -70,7 +71,7 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
                   {active && (
                     <motion.span
                       layoutId="nav-pill"
-                      className="absolute inset-0 -z-10 rounded-full bg-white shadow-xs border border-black/5"
+                      className="absolute inset-0 -z-10 rounded-full bg-white clay-pill border border-black/5"
                       transition={{ type: "spring", stiffness: 400, damping: 32 }}
                     />
                   )}

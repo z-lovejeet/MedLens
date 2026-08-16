@@ -67,6 +67,7 @@ export function AnalyzerFlow({ kind }: { kind: Kind }) {
         {stage === "loading" && (
           <LoadingState
             fileName={fileName}
+            kind={kind}
             onDone={() => {}}
           />
         )}

@@ -11,10 +11,10 @@ export function QuestionsSection({ questions }: { questions: string[] }) {
         </span>
         <div>
           <h2 id="questions-heading" className="font-display text-[18px] font-bold text-clay-slate">
-            Questions to ask your doctor
+            Take these words to your next appointment
           </h2>
           <p className="text-[14px] text-clay-muted">
-            Bring these along to your next visit so you feel prepared and calm.
+            Questions your report translates into, ready for your doctor's ear.
           </p>
         </div>
       </div>
@@ -23,18 +23,19 @@ export function QuestionsSection({ questions }: { questions: string[] }) {
         variants={stagger}
         initial="hidden"
         animate="show"
-        className="grid gap-3 sm:grid-cols-2"
+        className="flex flex-col gap-3"
       >
         {questions.map((q, i) => (
           <motion.li
             key={i}
             variants={fadeUp}
-            className="flex items-start gap-3 rounded-[18px] clay bg-white p-4"
+            whileHover={{ x: 3 }}
+            className="flex items-center gap-3.5 rounded-[18px] clay bg-white p-4 transition-transform"
           >
-            <span className="grid size-8 shrink-0 place-items-center rounded-[12px] bg-clay-sage/15 text-clay-sage">
-              <HelpCircle className="size-4" aria-hidden />
+            <span className="grid size-8 shrink-0 place-items-center rounded-[12px] bg-clay-sage/15 text-clay-sage font-display text-[13px] font-bold">
+              {i + 1}
             </span>
-            <p className="text-[15px] leading-relaxed text-clay-slate">{q}</p>
+            <p className="text-[15px] font-medium leading-relaxed text-clay-slate">{q}</p>
           </motion.li>
         ))}
       </motion.ul>
