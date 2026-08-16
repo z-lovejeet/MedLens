@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useMedLensStore } from "../../lib/store";
 import type { Kind } from "../../lib/types";
@@ -13,12 +13,20 @@ import { pageVariants } from "./anim";
 
 export function AnalyzerFlow({ kind }: { kind: Kind }) {
   const stage = useMedLensStore((s) => s.stage);
+  const storeKind = useMedLensStore((s) => s.kind);
   const fileName = useMedLensStore((s) => s.fileName);
   const error = useMedLensStore((s) => s.error);
   const analyze = useMedLensStore((s) => s.analyze);
   const loadSample = useMedLensStore((s) => s.loadSample);
   const reset = useMedLensStore((s) => s.reset);
   const setStage = useMedLensStore((s) => s.setStage);
+
+  // Reset store when switching between analyzers (e.g. blood → xray via navbar)
+  useEffect(() => {
+    if (storeKind && storeKind !== kind) {
+      reset();
+    }
+  }, [kind, storeKind, reset]);
 
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
