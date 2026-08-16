@@ -17,13 +17,13 @@ import { fadeUp, stagger, softScale } from "./anim";
 const PRIVACY_POINTS = [
   { icon: ServerOff, title: "Nothing is stored", body: "Your files are processed in-session and discarded the moment you leave. There is no database of your health." },
   { icon: EyeOff, title: "No tracking of your data", body: "We don't sell, share, or mine your report contents. Ever." },
-  { icon: Lock, title: "Yours to take", body: "Download or share your summary on your terms — the data belongs to you." },
+  { icon: Lock, title: "Yours to take", body: "Download or share your summary on your terms. The data belongs to you." },
 ];
 
 const ETHICS_POINTS = [
   { icon: Scale, title: "Honest about limits", body: "AI can be wrong. We surface confidence levels and never present a guess as a fact." },
   { icon: HeartHandshake, title: "Human in the loop", body: "MedLens is built to send you toward a clinician, not away from one." },
-  { icon: Accessibility, title: "Accessible to everyone", body: "Designed to WCAG 2.2 AA — icon + text + color cues, full keyboard support, and reduced-motion respect." },
+  { icon: Accessibility, title: "Accessible to everyone", body: "Designed to WCAG 2.2 AA with icon, text, and color cues, full keyboard support, and reduced-motion respect." },
 ];
 
 const CREDITS = [
