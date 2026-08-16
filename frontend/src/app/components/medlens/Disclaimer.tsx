@@ -85,7 +85,7 @@ export function DisclaimerModal({ open, onAccept }: { open: boolean; onAccept: (
               onClick={onAccept}
               className="mt-6 w-full rounded-full bg-clay-terracotta py-3.5 font-display font-semibold text-white clay-btn"
             >
-              I understand — let's go
+              I understand, let's go
             </motion.button>
           </motion.div>
         </motion.div>
