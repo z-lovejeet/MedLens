@@ -8,7 +8,7 @@ import { fadeUp, stagger } from "./anim";
 export function ConditionsSection({
   conditions,
   title = "Condition screening",
-  subtitle = "A gentle, plain-language look at what your results suggest — never a diagnosis.",
+  subtitle = "A gentle, plain-language look at what your results suggest. This is never a diagnosis.",
 }: {
   conditions: Condition[];
   title?: string;
