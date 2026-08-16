@@ -45,14 +45,6 @@ const TRUST = [
 export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
   return (
     <div className="relative overflow-hidden">
-      {/* Aurora backdrop */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 440, height: 440, top: 40, left: -60 }} />
-        <div className="aurora-blob animate-floaty" style={{ background: "#6bb89a", width: 400, height: 400, top: 100, right: -80, animationDelay: "-3s" }} />
-        <div className="aurora-blob animate-floaty" style={{ background: "#e48267", width: 380, height: 380, bottom: -120, left: "35%", animationDelay: "-6s" }} />
-        <div className="aurora-blob animate-floaty" style={{ background: "#eba85c", width: 300, height: 300, top: "45%", left: "8%", animationDelay: "-2s" }} />
-      </div>
-
       {/* Hero */}
       <section className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-4 pt-14 pb-8 lg:grid-cols-[1.1fr_0.9fr] lg:pt-20">
         <div>
