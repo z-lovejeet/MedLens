@@ -39,7 +39,7 @@ export function ConditionsSection({
         className="grid gap-4 sm:grid-cols-2"
       >
         {conditions.map((c) => {
-          const meta = STATUS_META[c.status];
+          const meta = STATUS_META[c.status] ?? STATUS_META.optimal;
           const Icon = meta.icon;
           return (
             <motion.article

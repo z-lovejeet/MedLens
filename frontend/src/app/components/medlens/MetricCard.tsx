@@ -6,7 +6,7 @@ import { STATUS_META } from "./data";
 
 export function MetricCard({ metric }: { metric: Metric }) {
   const [open, setOpen] = useState(false);
-  const meta = STATUS_META[metric.status];
+  const meta = STATUS_META[metric.status] ?? STATUS_META.optimal;
   const StatusIcon = meta.icon;
 
   const pct = (v: number) => {
