@@ -45,7 +45,7 @@ export function Footer({ onNavigate }: FooterProps) {
               MedLens
             </div>
             <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-clay-muted">
-              We turn cold, confusing medical reports into warm, human explanations —
+              We turn cold, confusing medical reports into warm, human explanations,
               so you can breathe easier and make calmer decisions about your health.
             </p>
             <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-[13px] font-semibold text-clay-sage">
