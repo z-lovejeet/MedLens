@@ -45,10 +45,10 @@ const TRUST = [
 export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
   return (
     <div className="relative">
-      {/* Mid-page gentle warmth */}
-      <div className="pointer-events-none absolute inset-x-0 top-1/4 h-[900px] overflow-hidden" aria-hidden>
-        <div className="aurora-blob animate-floaty" style={{ background: "#eba85c", width: 340, height: 340, top: "15%", left: "5%", opacity: 0.2, animationDelay: "-2s" }} />
-        <div className="aurora-blob animate-floaty" style={{ background: "#e48267", width: 320, height: 320, top: "45%", right: "8%", opacity: 0.18, animationDelay: "-6s" }} />
+      {/* Mid-page gentle ambient accents (Unified Signature Theme) */}
+      <div className="pointer-events-none absolute inset-x-0 top-1/4 h-[800px] overflow-hidden" aria-hidden>
+        <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 360, height: 360, top: "20%", left: "5%", opacity: 0.16, animationDelay: "-2s" }} />
+        <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 340, height: 340, top: "50%", right: "8%", opacity: 0.14, animationDelay: "-6s" }} />
       </div>
 
       {/* Hero */}

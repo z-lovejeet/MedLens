@@ -40,11 +40,20 @@ export default function App() {
       </a>
 
       <div className="min-h-screen bg-cream relative overflow-x-hidden">
-        {/* Global Ambient Aurora Header Backdrop (Purple & Green Scheme) */}
-        <div className="pointer-events-none absolute top-0 left-0 right-0 h-[650px] overflow-hidden z-0" aria-hidden>
-          <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 560, height: 560, top: -140, left: -100, opacity: 0.45 }} />
-          <div className="aurora-blob animate-floaty" style={{ background: "#6bb89a", width: 520, height: 520, top: -100, right: -80, opacity: 0.45, animationDelay: "-3s" }} />
-          <div className="aurora-blob animate-floaty" style={{ background: "#eba85c", width: 380, height: 380, top: -60, left: "35%", opacity: 0.35, animationDelay: "-5s" }} />
+        {/* Single Centered Ambient Header Glow (Signature Dusty Grape #8a6fb0) */}
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-[520px] overflow-hidden z-0" aria-hidden>
+          <div
+            className="aurora-blob animate-floaty"
+            style={{
+              background: "#8a6fb0",
+              width: 720,
+              height: 480,
+              top: -180,
+              left: "50%",
+              transform: "translateX(-50%)",
+              opacity: 0.32,
+            }}
+          />
         </div>
 
         <DisclaimerModal open={!accepted} onAccept={() => { setAccepted(true); localStorage.setItem('medlens-disclaimer', 'true'); }} />
