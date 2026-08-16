@@ -58,7 +58,7 @@ export function AnalyzerFlow({ kind }: { kind: Kind }) {
         {stage === "loading" && (
           <LoadingState
             fileName={fileName}
-            onDone={() => setStage("results")}
+            onDone={() => {}}
           />
         )}
         {stage === "error" && (
