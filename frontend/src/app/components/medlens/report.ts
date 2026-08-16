@@ -65,8 +65,8 @@ export async function shareReport(
     try {
       await navigator.share({ title: "My MedLens summary", text });
       return "shared";
-    } catch (err: any) {
-      if (err?.name === "AbortError") return; // User cancelled share dialog
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === "AbortError") return; // User cancelled share dialog
       await navigator.clipboard.writeText(text);
       return "copied";
     }
