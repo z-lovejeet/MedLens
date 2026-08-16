@@ -22,17 +22,14 @@ import { fadeUp, stagger, softScale } from "./anim";
 const XRAY_IMG =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' fill='%23e8e0d8'%3E%3Crect width='600' height='600'/%3E%3Ctext x='300' y='300' text-anchor='middle' fill='%23635b78' font-family='sans-serif' font-size='18'%3EChest X-Ray Preview%3C/text%3E%3C/svg%3E";
 
-const TOOLTIPS = [
-  { top: "26%", left: "34%", label: "Right lung field — clear" },
-  { top: "26%", left: "64%", label: "Left lung field — clear" },
-  { top: "52%", left: "50%", label: "Heart silhouette — normal size" },
-];
+
 
 export function XRayViewer({ onReset }: { onReset: () => void }) {
   const [heatmap, setHeatmap] = useState(false);
   const [hovered, setHovered] = useState<number | null>(null);
 
   const result = useMedLensStore((s) => s.result) as XRayAnalysisResponse | null;
+  const uploadedImageUrl = useMedLensStore((s) => s.uploadedImageUrl);
   if (!result) return null;
 
   const {
@@ -109,7 +106,7 @@ export function XRayViewer({ onReset }: { onReset: () => void }) {
 
           <div className="relative overflow-hidden rounded-[18px] bg-clay-slate">
             <ImageWithFallback
-              src={XRAY_IMG}
+              src={uploadedImageUrl || XRAY_IMG}
               alt="Chest X-ray radiograph, posteroanterior view showing clear lung fields and a normal heart silhouette"
               className="h-[360px] w-full object-cover opacity-95"
             />
@@ -127,31 +124,7 @@ export function XRayViewer({ onReset }: { onReset: () => void }) {
               />
             )}
 
-            {TOOLTIPS.map((t, i) => (
-              <button
-                key={t.label}
-                onClick={() => setHovered(hovered === i ? null : i)}
-                onMouseEnter={() => setHovered(i)}
-                onMouseLeave={() => setHovered(null)}
-                onFocus={() => setHovered(i)}
-                onBlur={() => setHovered(null)}
-                aria-label={t.label}
-                className="absolute size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-clay-terracotta/90"
-                style={{ top: t.top, left: t.left }}
-              >
-                <span
-                  className="grid size-full place-items-center text-[11px] font-bold text-white"
-                  aria-hidden
-                >
-                  {i + 1}
-                </span>
-                {hovered === i && (
-                  <span className="absolute left-1/2 top-7 z-10 w-max max-w-[180px] -translate-x-1/2 rounded-[12px] bg-white px-3 py-1.5 text-[12px] font-semibold text-clay-slate shadow-lg">
-                    {t.label}
-                  </span>
-                )}
-              </button>
-            ))}
+
           </div>
           <p className="mt-3 flex items-center gap-1.5 text-[13px] text-clay-muted">
             <Info className="size-3.5" aria-hidden /> Tap the numbered dots to
@@ -181,7 +154,7 @@ export function XRayViewer({ onReset }: { onReset: () => void }) {
             className="space-y-4"
           >
             {findings.map((f) => {
-              const meta = STATUS_META[f.status];
+              const meta = STATUS_META[f.status] ?? STATUS_META.optimal;
               const Icon = meta.icon;
               return (
                 <motion.li

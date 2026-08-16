@@ -31,6 +31,7 @@ interface MedLensStore {
   kind: Kind | null;
   stage: Stage;
   fileName: string;
+  uploadedImageUrl?: string;
   result: AnalysisResponse | null;
   error: AnalysisErrorType | null;
 
