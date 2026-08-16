@@ -1,20 +1,25 @@
 import { motion } from "motion/react";
 import { Download, Share2, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
-import { downloadReport, shareReport, type Kind } from "./report";
+import { downloadReport, shareReport } from "./report";
+import { useMedLensStore } from "../../lib/store";
 
-export function ResultActions({ kind, onReset }: { kind: Kind; onReset: () => void }) {
+export function ResultActions({ onReset }: { onReset: () => void }) {
+  const result = useMedLensStore((s) => s.result);
+
   const handleDownload = () => {
-    downloadReport(kind);
+    if (!result) return;
+    downloadReport(result);
     toast.success("Summary downloaded", {
       description: "Saved as a text file you can bring to your doctor.",
     });
   };
 
   const handleShare = async () => {
+    if (!result) return;
     try {
-      const result = await shareReport(kind);
-      if (result === "copied") {
+      const outcome = await shareReport(result);
+      if (outcome === "copied") {
         toast.success("Copied to clipboard", {
           description: "Your summary is ready to paste and share.",
         });
