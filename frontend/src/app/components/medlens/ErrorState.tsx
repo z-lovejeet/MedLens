@@ -9,7 +9,7 @@ const CONTENT: Record<
 > = {
   timeout: {
     title: "Our AI is taking longer than usual",
-    body: "This sometimes happens with complex reports. Nothing's broken on your side — let's give it another gentle try.",
+    body: "This sometimes happens with complex reports. Nothing's broken on your side. Let's give it another gentle try.",
     primary: "Try again",
     secondary: "Try a different file",
   },
@@ -20,7 +20,7 @@ const CONTENT: Record<
   },
   server: {
     title: "Something went wrong on our end",
-    body: "We're really sorry about that — it's us, not you. Please give it another try in a moment.",
+    body: "We're really sorry about that. It's us, not you. Please give it another try in a moment.",
     primary: "Try again",
   },
 };
