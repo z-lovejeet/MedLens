@@ -1,57 +1,80 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useMedLensStore } from "../../lib/store";
+import type { Kind } from "../../lib/types";
 import { FileUpload } from "./FileUpload";
 import { LoadingState } from "./LoadingState";
-import { ErrorState, type AnalysisErrorType } from "./ErrorState";
+import { ErrorState } from "./ErrorState";
 import { ReportResults } from "./ReportResults";
 import { XRayViewer } from "./XRayViewer";
 import { WellnessTips } from "./WellnessTips";
 import { pageVariants } from "./anim";
 
-type Stage = "idle" | "loading" | "results" | "error";
-type Kind = "blood" | "xray";
-
-const ERROR_TYPES: AnalysisErrorType[] = ["timeout", "parsing", "server"];
-
 export function AnalyzerFlow({ kind }: { kind: Kind }) {
-  const [stage, setStage] = useState<Stage>("idle");
-  const [fileName, setFileName] = useState("");
-  const [errorType, setErrorType] = useState<AnalysisErrorType>("timeout");
+  const stage = useMedLensStore((s) => s.stage);
+  const fileName = useMedLensStore((s) => s.fileName);
+  const error = useMedLensStore((s) => s.error);
+  const analyze = useMedLensStore((s) => s.analyze);
+  const loadSample = useMedLensStore((s) => s.loadSample);
+  const reset = useMedLensStore((s) => s.reset);
+  const setStage = useMedLensStore((s) => s.setStage);
 
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-  const analyze = useCallback((name: string) => {
-    setFileName(name);
-    setStage("loading");
-    scrollTop();
-  }, []);
+  const handleAnalyze = useCallback(
+    (file: File) => {
+      scrollTop();
+      analyze(file, kind);
+    },
+    [analyze, kind],
+  );
 
-  const previewError = useCallback(() => {
-    setErrorType(ERROR_TYPES[Math.floor(Math.random() * ERROR_TYPES.length)]);
-    setStage("error");
+  const handleSample = useCallback(() => {
     scrollTop();
-  }, []);
+    loadSample(kind);
+  }, [loadSample, kind]);
 
-  const reset = useCallback(() => {
-    setStage("idle");
+  const handleReset = useCallback(() => {
+    reset();
     scrollTop();
-  }, []);
+  }, [reset]);
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div key={stage} variants={pageVariants} initial="initial" animate="enter" exit="exit">
+      <motion.div
+        key={stage}
+        variants={pageVariants}
+        initial="initial"
+        animate="enter"
+        exit="exit"
+      >
         {stage === "idle" && (
-          <FileUpload kind={kind} onAnalyze={analyze} onPreviewError={previewError} />
+          <FileUpload
+            kind={kind}
+            onAnalyze={handleAnalyze}
+            onSample={handleSample}
+          />
         )}
         {stage === "loading" && (
-          <LoadingState fileName={fileName} onDone={() => setStage("results")} />
+          <LoadingState
+            fileName={fileName}
+            onDone={() => setStage("results")}
+          />
         )}
         {stage === "error" && (
-          <ErrorState type={errorType} onRetry={() => setStage("loading")} onNewFile={reset} />
+          <ErrorState
+            type={error ?? "server"}
+            onRetry={handleReset}
+            onNewFile={handleReset}
+          />
         )}
         {stage === "results" && (
           <>
-            {kind === "blood" ? <ReportResults onReset={reset} /> : <XRayViewer onReset={reset} />}
+            {kind === "blood" ? (
+              <ReportResults onReset={handleReset} />
+            ) : (
+              <XRayViewer onReset={handleReset} />
+            )}
             <WellnessTips />
           </>
         )}
