@@ -23,9 +23,9 @@ interface LandingProps {
 }
 
 const FEATURES = [
-  { icon: ScanText, title: "Reads any report", body: "Blood work, lipid panels, CBCs or chest X-rays — drop a PDF or photo and we handle the rest.", tint: "#8a6fb0" },
+  { icon: ScanText, title: "Reads any report", body: "Blood work, lipid panels, CBCs or chest X-rays. Drop a PDF or photo and we handle the rest.", tint: "#8a6fb0" },
   { icon: Sparkles, title: "Plain-English answers", body: "Every term is rewritten at a 6th-grade reading level, warm and free of scary jargon.", tint: "#6bb89a" },
-  { icon: HeartPulse, title: "Gentle guidance", body: "Cozy, personalized lifestyle nudges — never alarmist, always kind and actionable.", tint: "#e48267" },
+  { icon: HeartPulse, title: "Gentle guidance", body: "Cozy, personalized lifestyle nudges. Never alarmist, always kind and actionable.", tint: "#e48267" },
   { icon: Lock, title: "Private by design", body: "Files are processed in your session and never stored. Your health stays yours.", tint: "#eba85c" },
 ];
 
@@ -82,7 +82,7 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
             className="mt-6 max-w-lg text-[18px] leading-relaxed text-clay-muted"
           >
             No one should sit alone with a page of numbers they can't read. Drop your blood work,
-            lab test, or chest X-ray — MedLens turns it into warm, cozy explanations you can
+            lab test, or chest X-ray, MedLens turns it into warm, cozy explanations you can
             actually understand.
           </motion.p>
 
