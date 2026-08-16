@@ -162,10 +162,10 @@ export function ChatWidget() {
       <button
         onClick={() => setOpen(!open)}
         aria-label={open ? "Close chat" : "Open chat"}
-        className="fixed bottom-6 right-6 z-50 grid size-14 place-items-center rounded-full clay bg-clay-terracotta text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+        className="fixed bottom-6 right-6 z-50 grid size-14 place-items-center rounded-full bg-clay-terracotta text-white shadow-[4px_4px_10px_rgba(0,0,0,0.12),-3px_-3px_8px_rgba(255,255,255,0.7),inset_1px_1px_2px_rgba(255,255,255,0.3)] transition-transform hover:scale-105 active:scale-95"
       >
         <MessageCircle
-          className={`size-6 ${!open && messages.length === 0 ? "animate-pulse" : ""}`}
+          className={`size-7 ${!open && messages.length === 0 ? "animate-pulse" : ""}`}
           aria-hidden
         />
       </button>
