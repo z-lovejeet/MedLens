@@ -65,5 +65,5 @@ export const FIELD_ICON_MAP: Record<string, LucideIcon> = {
 };
 
 export function resolveFieldIcon(label: string): LucideIcon {
-  return FIELD_ICON_MAP[label.toLowerCase()] ?? Info;
+  return FIELD_ICON_MAP[label?.toLowerCase?.() ?? ""] ?? Info;
 }
