@@ -37,9 +37,9 @@ const STEPS = [
 ];
 
 const TRUST = [
-  { icon: Lock, label: "Client-Side State · Privacy-First" },
-  { icon: ShieldCheck, label: "Evidence-Based Reference Ranges" },
-  { icon: Accessibility, label: "Full Keyboard & Screen Reader Ready" },
+  { icon: Lock, label: "Zero PII · Privacy-First" },
+  { icon: ShieldCheck, label: "Evidence-Based Ranges" },
+  { icon: Accessibility, label: "WCAG 2.2 AA Accessible" },
 ];
 
 export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
@@ -101,11 +101,11 @@ export function Landing({ onEnter, onAbout, onSample }: LandingProps) {
             </motion.button>
           </motion.div>
 
-          <motion.ul variants={fadeUp} custom={4} initial="hidden" animate="show" className="mt-8 flex flex-wrap gap-4">
+          <motion.ul variants={fadeUp} custom={4} initial="hidden" animate="show" className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13.5px] font-semibold text-clay-muted">
             {TRUST.map((t) => {
               const Icon = t.icon;
               return (
-                <li key={t.label} className="inline-flex items-center gap-2 text-[14px] font-semibold text-clay-muted">
+                <li key={t.label} className="inline-flex items-center gap-1.5 whitespace-nowrap">
                   <Icon className="size-4 text-clay-sage" aria-hidden /> {t.label}
                 </li>
               );
