@@ -1,9 +1,12 @@
 """Application settings loaded from environment variables."""
 
 import os
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 
 class Settings:
@@ -18,9 +21,9 @@ class Settings:
     GROQ_MODEL: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
     # CORS
-    ALLOWED_ORIGINS: list[str] = os.getenv(
-        "ALLOWED_ORIGINS", "http://localhost:5173"
-    ).split(",")
+    ALLOWED_ORIGINS: list[str] = [
+        o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if o.strip()
+    ]
 
     # Server
     HOST: str = os.getenv("HOST", "0.0.0.0")
@@ -35,3 +38,8 @@ class Settings:
 
 
 settings = Settings()
+
+if not settings.GEMINI_API_KEY:
+    logger.warning("GEMINI_API_KEY is not set — Gemini model calls will fail")
+if not settings.GROQ_API_KEY:
+    logger.warning("GROQ_API_KEY is not set — Groq model calls will fail")
