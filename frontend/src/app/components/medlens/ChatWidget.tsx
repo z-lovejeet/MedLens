@@ -87,7 +87,7 @@ export function ChatWidget() {
               className="flex-1 min-h-0 space-y-3 overflow-y-auto px-4 py-4"
             >
               <div className="mr-auto max-w-[85%] rounded-[16px] rounded-bl-[4px] bg-clay-cream px-4 py-2.5 text-[14px] leading-relaxed text-clay-slate">
-                Hi! I've analyzed your results. Ask me anything — like what a specific number means, or what you can do to improve. 💚
+                Hi! I've analyzed your results. Ask me anything, like what a specific number means, or what you can do to improve. 💚
               </div>
               {messages.map((msg, idx) => (
                 <div
