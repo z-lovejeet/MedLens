@@ -8,6 +8,7 @@ import { ErrorState } from "./ErrorState";
 import { ReportResults } from "./ReportResults";
 import { XRayViewer } from "./XRayViewer";
 import { WellnessTips } from "./WellnessTips";
+import { ChatWidget } from "./ChatWidget";
 import { pageVariants } from "./anim";
 
 export function AnalyzerFlow({ kind }: { kind: Kind }) {
@@ -76,6 +77,7 @@ export function AnalyzerFlow({ kind }: { kind: Kind }) {
               <XRayViewer onReset={handleReset} />
             )}
             <WellnessTips />
+            <ChatWidget />
           </>
         )}
       </motion.div>
