@@ -39,9 +39,11 @@ export function Footer({ onNavigate }: FooterProps) {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5 font-display text-[22px] font-bold text-clay-slate">
-              <span className="grid size-10 place-items-center rounded-[16px] bg-clay-terracotta text-white clay-btn">
-                <Stethoscope className="size-5" aria-hidden />
-              </span>
+              <img
+                src="/logo.png"
+                alt="MedLens Logo"
+                className="size-10 rounded-[14px] object-cover clay-btn shadow-xs border border-black/5"
+              />
               MedLens
             </div>
             <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-clay-muted">

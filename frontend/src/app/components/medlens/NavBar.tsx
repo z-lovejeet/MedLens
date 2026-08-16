@@ -47,9 +47,11 @@ export function NavBar({ page, onNavigate, onUpload }: NavBarProps) {
           className="flex items-center gap-2.5 rounded-full font-display text-[20px] font-bold text-clay-slate cursor-pointer"
           aria-label="MedLens home"
         >
-          <span className="grid size-9 place-items-center rounded-[14px] bg-clay-terracotta text-white clay-btn">
-            <Stethoscope className="size-5" aria-hidden />
-          </span>
+          <img
+            src="/logo.png"
+            alt="MedLens Logo"
+            className="size-9 rounded-[12px] object-cover clay-btn shadow-xs border border-black/5"
+          />
           MedLens
         </button>
 
