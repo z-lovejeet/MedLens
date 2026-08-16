@@ -46,7 +46,7 @@ export function AboutPage({ onCta }: AboutPageProps) {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
-        className="mt-8 rounded-[28px] clay-lg p-8 sm:p-10"
+        className="relative z-10 mt-8 rounded-[28px] clay-lg bg-clay-white p-8 sm:p-10"
       >
         <p className="text-[18px] leading-relaxed text-clay-slate/90">
           A few years ago, one of us sat with a parent who'd just been handed a page full of

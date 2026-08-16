@@ -41,7 +41,7 @@ export default function App() {
 
       <div className="min-h-screen bg-cream relative overflow-x-hidden">
         {/* Global Ambient Aurora Header Backdrop (Purple & Green Scheme) */}
-        <div className="pointer-events-none absolute top-0 left-0 right-0 h-[650px] overflow-hidden" aria-hidden>
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-[650px] overflow-hidden z-0" aria-hidden>
           <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 560, height: 560, top: -140, left: -100, opacity: 0.45 }} />
           <div className="aurora-blob animate-floaty" style={{ background: "#6bb89a", width: 520, height: 520, top: -100, right: -80, opacity: 0.45, animationDelay: "-3s" }} />
           <div className="aurora-blob animate-floaty" style={{ background: "#eba85c", width: 380, height: 380, top: -60, left: "35%", opacity: 0.35, animationDelay: "-5s" }} />
@@ -51,7 +51,7 @@ export default function App() {
 
         <NavBar page={page} onNavigate={navigate} onUpload={() => navigate("report")} />
 
-        <main id="main" ref={mainRef} tabIndex={-1} className="outline-none">
+        <main id="main" ref={mainRef} tabIndex={-1} className="relative z-10 outline-none">
           <AnimatePresence mode="wait">
             <motion.div
               key={page}
@@ -59,7 +59,7 @@ export default function App() {
               initial="initial"
               animate="enter"
               exit="exit"
-              className="pt-6"
+              className="relative z-10 pt-6"
             >
               {page === "home" && (
                 <Landing onEnter={() => navigate("report")} onAbout={() => navigate("about")} onSample={() => navigate("report")} />
@@ -77,13 +77,6 @@ export default function App() {
             </motion.div>
           </AnimatePresence>
         </main>
-
-        {/* Global Ambient Aurora Footer Backdrop (Purple & Green Scheme) */}
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[650px] overflow-hidden" aria-hidden>
-          <div className="aurora-blob animate-floaty" style={{ background: "#8a6fb0", width: 560, height: 560, bottom: -140, right: -100, opacity: 0.45, animationDelay: "-4s" }} />
-          <div className="aurora-blob animate-floaty" style={{ background: "#6bb89a", width: 520, height: 520, bottom: -100, left: -80, opacity: 0.45, animationDelay: "-7s" }} />
-          <div className="aurora-blob animate-floaty" style={{ background: "#eba85c", width: 380, height: 380, bottom: -60, left: "45%", opacity: 0.35, animationDelay: "-2s" }} />
-        </div>
 
         <Footer onNavigate={navigate} />
       </div>
