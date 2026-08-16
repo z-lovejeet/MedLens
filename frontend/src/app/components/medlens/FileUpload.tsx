@@ -17,7 +17,6 @@ interface FileUploadProps {
   onSample: () => void;
 }
 
-const ACCEPTED = ["application/pdf", "image/png", "image/jpeg"];
 const MAX_BYTES = 10 * 1024 * 1024; // 10MB
 
 const COPY: Record<
@@ -31,7 +30,6 @@ const COPY: Record<
     icon: typeof Stethoscope;
     sampleTitle: string;
     sampleSub: string;
-    sampleFile: string;
   }
 > = {
   blood: {
@@ -43,7 +41,6 @@ const COPY: Record<
     icon: Stethoscope,
     sampleTitle: "Try a sample Blood Report",
     sampleSub: "CBC + Lipid panel",
-    sampleFile: "sample-blood-report.pdf",
   },
   xray: {
     step: "X-Ray Analyzer · Step 1",
@@ -54,7 +51,6 @@ const COPY: Record<
     icon: ScanLine,
     sampleTitle: "Try a sample Chest X-Ray",
     sampleSub: "PA view scan",
-    sampleFile: "sample-chest-xray.png",
   },
 };
 
@@ -65,10 +61,19 @@ export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
   const DropIcon = c.icon;
 
   const validateAndGo = (file: File) => {
-    const nameOk = /\.(pdf|png|jpe?g)$/i.test(file.name);
+    const ACCEPTED = kind === "xray"
+      ? ["image/png", "image/jpeg", "image/webp"]
+      : ["application/pdf", "image/png", "image/jpeg"];
+    const nameOk = kind === "xray"
+      ? /\.(png|jpe?g|webp)$/i.test(file.name)
+      : /\.(pdf|png|jpe?g)$/i.test(file.name);
+
     if (!ACCEPTED.includes(file.type) && !nameOk) {
+      const description = kind === "xray" 
+        ? "Please upload a PNG, JPG, or WebP image"
+        : "Please upload a PDF, PNG, or JPG file";
       toast.error("This file type isn't supported", {
-        description: "Please upload a PDF, PNG, or JPG.",
+        description,
       });
       return;
     }
@@ -161,7 +166,7 @@ export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
 
         <p className="mt-4 flex items-center justify-center gap-2 text-[13px] font-semibold text-clay-sage">
           <ShieldCheck className="size-4" aria-hidden /> Processed privately in
-          your session — never saved.
+          your browser. Results saved locally for your convenience.
         </p>
 
         <div className="mt-4">
