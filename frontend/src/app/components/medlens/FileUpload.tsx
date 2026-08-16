@@ -37,7 +37,7 @@ const COPY: Record<
     heading: "Let's make sense of your report, together.",
     sub: "Drop your blood work or lab test below. We'll gently translate every confusing term into warm, plain language.",
     dropTitle: "Drop your blood report here, or tap to browse",
-    dropSub: "CBC, Lipid panels, metabolic panels — PDF, PNG or JPG (max 10MB)",
+    dropSub: "CBC, Lipid panels, metabolic panels. PDF, PNG or JPG (max 10MB)",
     icon: Stethoscope,
     sampleTitle: "Try a sample Blood Report",
     sampleSub: "CBC + Lipid panel",
@@ -47,7 +47,7 @@ const COPY: Record<
     heading: "Let's take a calm look at your scan, together.",
     sub: "Drop your chest X-ray below. Our vision model highlights each region and explains it in warm, plain language.",
     dropTitle: "Drop your chest X-ray here, or tap to browse",
-    dropSub: "Chest X-rays, PA or AP views — PNG or JPG (max 10MB)",
+    dropSub: "Chest X-rays, PA or AP views. PNG or JPG (max 10MB)",
     icon: ScanLine,
     sampleTitle: "Try a sample Chest X-Ray",
     sampleSub: "PA view scan",
@@ -79,7 +79,7 @@ export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
     }
     if (file.size > MAX_BYTES) {
       toast.error("This file is a little too large", {
-        description: "Max 10MB — try compressing it and upload again.",
+        description: "Max 10MB. Try compressing it and upload again.",
       });
       return;
     }
@@ -150,7 +150,7 @@ export function FileUpload({ kind, onAnalyze, onSample }: FileUploadProps) {
             <DropIcon className="size-11" aria-hidden />
           </motion.div>
           <p className="font-display text-[21px] font-bold text-clay-slate">
-            {dragging ? "Perfect — drop it right here" : c.dropTitle}
+            {dragging ? "Perfect, drop it right here" : c.dropTitle}
           </p>
           <p className="mt-2 text-[15px] text-clay-muted">{c.dropSub}</p>
         </button>
